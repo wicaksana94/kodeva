@@ -70,11 +70,4 @@ export const leadRequestSchema = z
 
 export type LeadRequest = z.infer<typeof leadRequestSchema>;
 
-export function fieldErrorsFromZod(error: z.ZodError): Record<string, string> {
-  const fieldErrors: Record<string, string> = {};
-  for (const issue of error.issues) {
-    const key = String(issue.path[0] ?? 'form');
-    if (!fieldErrors[key]) fieldErrors[key] = issue.message;
-  }
-  return fieldErrors;
-}
+export { fieldErrorsFromZod } from '@/lib/validation';
