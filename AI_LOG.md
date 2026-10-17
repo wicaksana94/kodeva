@@ -74,6 +74,10 @@ Sesuai instruksi brief ("kalau ada hal yang ambigu, tanyakan atau tulis asumsi")
 - **Verifikasi:** `pnpm install` menjalankan postinstall esbuild (`postinstall: Done`) dan
   `node_modules/.bin/esbuild --version` → `0.28.2`. Perubahan ikut ter-commit
   (`chore: scaffold Next.js 16 + TypeScript + Tailwind with tooling`, `3a7e938`).
+- **Iterasi saat deploy Vercel:** instalasi CI yang segar masih gagal karena dep transitif baru
+  (`ERR_PNPM_IGNORED_BUILDS: unrs-resolver@1.12.2`; postinstall-nya hanya verifikasi binding
+  napi — binernya sudah dibawa `optionalDependencies`). Ditambahkan `unrs-resolver: false`
+  (deny eksplisit) di `allowBuilds`; deploy ulang langsung `READY`.
 
 ### 4.2 Keterbatasan alat: model tidak bisa membaca PDF secara langsung
 
