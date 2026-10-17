@@ -49,3 +49,4 @@ tsconfig.tsbuildinfo
 .firecrawl
 coverage
 /.sanity
+/.data
