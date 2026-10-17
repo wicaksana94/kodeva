@@ -8,6 +8,9 @@ _Technical Skill Test Fullstack Developer DSG_.
 - **Studio CMS (marketing):** `https://<domain>/studio`
 - **AI log:** lihat [`AI_LOG.md`](./AI_LOG.md)
 - **Laporan Lighthouse:** lihat [`docs/lighthouse/`](./docs/lighthouse) (JSON + HTML + screenshot)
+- **Waktu pengerjaan:** ±1,5 jam, satu sesi pada 17 Oktober 2026 (implementasi 09:45–10:20 WIB
+  menurut riwayat commit, di luar analisis brief & sesi tanya-jawab awal). Rincian per
+  milestone ada di commit history dan [`AI_LOG.md`](./AI_LOG.md).
 
 > Semua konten (produk, harga, testimoni, artikel, kontak) adalah data dummy untuk keperluan
 > skill test. Tidak ada transaksi/ pembayaran sungguhan.
@@ -190,7 +193,135 @@ utama). Rincian iterasi (termasuk kesalahan yang ditemukan) ada di `AI_LOG.md` �
 
 ---
 
-## 5. Struktur proyek (ringkas)
+## 5. Asumsi atas hal yang ambigu
+
+1. **Harga & periode:** semua harga rupiah bulat, periode lisensi 1 bulan, tanpa PPN/biaya lain.
+   "Harga coret" hanya berasal dari harga promo di data produk.
+2. **Model kuota promo:** brief menyebut kuota berlaku terhadap _total lisensi produk yang sama_
+   lintas baris/paket. Diimplementasikan sebagai satu kuota per produk yang dipakai bersama semua
+   paket promonya (angka dummy di `src/lib/catalog/data.ts`).
+3. **"Screenshot fitur":** brand fiktif, sehingga tidak ada aplikasi nyata untuk di-screenshot —
+   dipakai mockup UI ber-brand (dirender CSS) yang tetap memperlihatkan tampilan fitur di galeri
+   produk.
+4. **Checkout:** brief meminta nama + email; ditambah WhatsApp & perusahaan (opsional) karena
+   penjualan ke UMKM lazim membutuhkan kontak WA — hanya email yang memicu aturan gagal
+   deterministik (`fail@...`).
+5. **Tanpa backend:** lead & order demo disimpan sebagai file/JSONL + log; rencana penyimpanan
+   produksi ada di §7.
+6. **Caching:** target "perubahan CMS tampil tanpa deploy" dicapai via webhook revalidasi; TTL
+   10 menit adalah jaring pengaman bila webhook belum dikonfigurasi (§4.1).
+7. **Bahasa & wilayah:** UI Bahasa Indonesia. Ekspansi MY/SG yang disebut tim marketing belum
+   termasuk scope wajib — dicatat sebagai roadmap i18n di §6.
+8. **Waktu & infrastruktur:** tanggal konten dalam zona WIB; rate limit in-memory dianggap cukup
+   untuk demo satu instans.
+
+## 6. Status pekerjaan
+
+### Selesai (seluruh requirement wajib brief)
+
+- **A. Landing + blog + CMS:** semua section landing dapat diedit marketing (termasuk produk
+  unggulan, testimoni, FAQ, dan copy), lead form tersimpan & terlihat di Studio, blog dengan
+  pagination + slug, draft/publish, penautan produk, revalidasi tanpa deploy.
+- **B. Mini marketplace:** 8 produk + filter kategori, detail dengan paket Basic/Pro/Business,
+  promo + kuota lintas baris, keranjang persisten, checkout dengan simulasi sukses/gagal,
+  state loading/error/kosong, mobile-friendly.
+- **C. Marketing:** Lighthouse mobile Performance **97** di landing (target ≥80); event GA4
+  (`view_item`, `add_to_cart`, `begin_checkout`, `cta_click`) terbukti terkirim via
+  `?debug=events` dan tidak dobel saat re-render; UTM last-touch 30 hari ikut di payload lead
+  dan order.
+- **Dokumentasi:** README ini + `AI_LOG.md` + 53 unit test + laporan Lighthouse di
+  `docs/lighthouse/`.
+
+### Bonus (opsional) — sebagian tercapai, sisanya masuk roadmap
+
+- ✔ **Test otomatis untuk logika penting** (kuota & total harga — bonus #7) dan **filter kategori
+  tercermin di URL** (`/katalog?kategori=kasir` dapat dibagikan — bagian bonus #2).
+- ✘ Belum: urutkan harga/pencarian di katalog, durasi langganan + tabel perbandingan paket,
+  pengaturan urutan/visibilitas section landing dari CMS, penjadwalan promo, kode voucher,
+  preview draft khusus (Sanity menyediakan draft secara bawaan).
+
+### Belum dikerjakan
+
+- **Link deploy + akun CMS demo** untuk reviewer — langkah terakhir pengumpulan (§10); aplikasi
+  sudah siap deploy.
+- Integrasi backend marketplace (§7) dan item bonus di atas.
+
+### Kalau ada waktu 1 minggu lagi (urutan prioritas)
+
+1. **Deploy & operasional:** Vercel + Sanity produksi, webhook, error monitoring (Sentry), rate
+   limit berbasis Redis (bukan in-memory).
+2. **Backend marketplace sesuai §7** (orders + payment gateway sandbox, webhook tervalidasi,
+   pengiriman lisensi) — pondasi nilai jual sebenarnya.
+3. **Bonus katalog & detail:** sortir harga + pencarian dengan state di URL, durasi
+   bulanan/tahunan, tabel perbandingan paket, kode voucher.
+4. **CMS lanjutan:** urutan/visibilitas section + penjadwalan promo dari CMS, preview draft.
+5. **i18n ID/EN + mata uang MYR/SGD** untuk ekspansi tim regional.
+6. **E2E test (Playwright)** untuk alur beli + audit aksesibilitas otomatis di CI.
+
+## 7. Rencana menghubungkan marketplace ke backend (di luar scope test ini)
+
+Bagian marketplace sengaja frontend-only. Berikut rancangan produksinya — memanfaatkan kode yang
+sudah ada: logika harga & kuota di `src/lib/cart/logic.ts` dipakai ulang apa adanya di server.
+
+### 7.1 Endpoint yang dibutuhkan
+
+| Endpoint                                       | Fungsi                                                                                                                                                                                       |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /api/products`, `GET /api/products/:slug` | katalog & detail dengan kuota promo real-time (cache TTL pendek)                                                                                                                             |
+| `POST /api/orders`                             | buat order `pending`: terima `{ items, customer, attribution }`, hitung ulang harga & validasi kuota **dari database**, lakukan reservasi kuota (7.3), kembalikan `orderId` + jumlah tagihan |
+| `POST /api/orders/:id/pay`                     | inisiasi pembayaran ke gateway; amount diambil dari order di DB, bukan dari client                                                                                                           |
+| `GET /api/orders/:id`                          | status order untuk halaman hasil pembayaran                                                                                                                                                  |
+| `POST /api/webhooks/payment`                   | callback gateway (7.2)                                                                                                                                                                       |
+| `POST /api/orders/:id/cancel`                  | batalkan order pending + lepas reservasi kuota                                                                                                                                               |
+| `POST /api/leads`                              | sudah ada; di produksi menyimpan ke DB dan meneruskan ke CRM/email tim marketing                                                                                                             |
+
+### 7.2 Alur payment gateway yang aman (contoh: Midtrans/Xendit)
+
+1. **Order `pending`** dibuat server-side; `amount` tersimpan di DB dan tidak dapat dipengaruhi
+   client. Order memegang **reservasi kuota**.
+2. **Inisiasi pembayaran** ke gateway memakai `order_id` internal sebagai idempotency key; client
+   hanya menerima token/redirect.
+3. **Webhook** masuk ke `POST /api/webhooks/payment` dengan dua lapis verifikasi:
+   - **validasi signature** (mis. SHA-512 `order_id + status_code + gross_amount + server_key`),
+   - **validasi amount** harus sama persis dengan `amount` order — payload mentah tidak pernah
+     dipercaya.
+4. **Pemrosesan idempotent**: dikunci per `order_id` (unique constraint di DB) sehingga webhook
+   duplikat/retry tidak menggandakan lisensi. Status bergerak
+   `pending → paid → fulfilled`, dengan cabang `failed` / `expired` / `refunded`.
+5. **Halaman hasil** memantau `GET /api/orders/:id` (polling singkat) dengan tombol "coba lagi"
+   yang membuat tautan pembayaran baru untuk order yang sama.
+6. **Rekonsiliasi harian**: order `pending` yang melewati batas waktu otomatis di-`expire` dan
+   reservasi kuotanya dilepas.
+
+### 7.3 Menjaga kuota lisensi promo tetap akurat
+
+- **Satu sumber kebenaran = database** (tabel `promo_quotas(product_id, total, used)` +
+  `order_items`). Keranjang client hanya untuk UX — server menghitung ulang saat
+  `POST /api/orders`, persis seperti mock payment sekarang.
+- **Decrement atomik** dengan syarat batas:
+  `UPDATE promo_quotas SET used = used + :qty WHERE product_id = :id AND used + :qty <= total` →
+  jika 0 baris ter-update berarti kuota habis ⇒ tolak `409` (menggantikan cek in-memory yang ada
+  sekarang). Tidak ada read-then-write yang racy.
+- **Reservasi berbatas waktu** untuk order `pending` (tabel `quota_holds` atau kolom status),
+  dilepas otomatis saat order gagal/expired. Mencegah oversell ketika dua pembeli checkout
+  bersamaan.
+- **Anti-double-spend**: pembuatan lisensi idempotent per `order_id`; refund mengembalikan kuota
+  sesuai kebijakan bisnis.
+- Penjadwalan promo dari CMS (bonus) menulis ke tabel yang sama sehingga tetap satu hitungan.
+
+### 7.4 Pengiriman lisensi setelah pembayaran berhasil
+
+1. Transisi `paid` memicu job pembuatan lisensi yang **idempotent** (unique `order_item_id`):
+   generate kode (mis. `KODV-<PRODUK>-<ACAK>`), simpan terenkripsi bersama tanda tangan untuk
+   keperluan aktivasi.
+2. Kirim email transaksional berisi kode + tautan aktivasi; sediakan juga halaman akun agar
+   pembeli bisa melihat lisensinya tanpa bergantung pada email.
+3. Kegagalan pengiriman masuk retry dengan backoff + dead-letter queue; order tetap `paid`
+   karena lisensi sudah dibuat — hanya notifikasinya yang tertunda.
+4. Untuk langganan: simpan `expires_at` per lisensi + job pengingat perpanjangan dan suspensi
+   otomatis saat kedaluwarsa.
+
+## 8. Struktur proyek (ringkas)
 
 ```
 src/
@@ -218,7 +349,7 @@ docs/lighthouse/       # bukti audit (JSON/HTML/PNG)
 
 ---
 
-## 6. Untuk tim marketing (cara pakai CMS)
+## 9. Untuk tim marketing (cara pakai CMS)
 
 1. Buka `/studio` (login sekali dengan akun Sanity yang diundang).
 2. **Landing Page** (singleton): edit hero, produk unggulan (pilih dari daftar produk valid),
@@ -232,7 +363,7 @@ docs/lighthouse/       # bukti audit (JSON/HTML/PNG)
 
 ---
 
-## 7. Deploy
+## 10. Deploy
 
 ### Vercel
 
@@ -255,10 +386,12 @@ pnpm dlx vercel --prod
    - Method: POST, HTTP header secret (`sanity-webhook-signature`)
    - Secret: sama dengan env `SANITY_REVALIDATE_SECRET`
    - Trigger: Create + Update + Delete, filter: kosongkan (tag dihitung di route)
+5. **Akun CMS demo untuk reviewer:** undang email reviewer sebagai member project Sanity
+   (hak edit konten) sehingga mereka dapat mencoba mengubah konten di `/studio`.
 
 ---
 
-## 8. Pengujian
+## 11. Pengujian
 
 - 53 unit test (`pnpm test`) pada logika yang paling mudah salah:
   - **Kuota promo lintas baris** (22 test): pembagian kuota Pro+Business satu produk, pelepasan
@@ -272,9 +405,11 @@ pnpm dlx vercel --prod
   **99/100/100/100**, produk **99/100/100/100**, blog **96/100/100/100** — file lengkap di
   `docs/lighthouse/`.
 
+![Lighthouse mobile — landing page](./docs/lighthouse/home-report.png)
+
 ---
 
-## 9. Dokumentasi penggunaan AI
+## 12. Dokumentasi penggunaan AI
 
 Seluruh penggunaan AI (tools, prompt terbaik, kesalahan AI yang ditemukan & diperbaiki,
 bagian yang dibantu AI + edge case yang diuji, dan bagian yang dikerjakan tanpa AI) dicatat
