@@ -73,7 +73,7 @@ Sesuai instruksi brief ("kalau ada hal yang ambigu, tanyakan atau tulis asumsi")
 - **Perbaikan final:** `allowBuilds: { esbuild: true, sharp: true }` di `pnpm-workspace.yaml`.
 - **Verifikasi:** `pnpm install` menjalankan postinstall esbuild (`postinstall: Done`) dan
   `node_modules/.bin/esbuild --version` → `0.28.2`. Perubahan ikut ter-commit
-  (`chore: scaffold ...`, `aff95f3`).
+  (`chore: scaffold Next.js 16 + TypeScript + Tailwind with tooling`, `3a7e938`).
 
 ### 4.2 Keterbatasan alat: model tidak bisa membaca PDF secara langsung
 
@@ -187,22 +187,25 @@ copy/konten); (d) pengecekan hasil deploy.)_
 3. Scaffold `kodeva`: Next.js 16 (App Router, Cache Components) + TypeScript + Tailwind 4;
    dependency: `sanity`, `next-sanity`, `zustand`, `zod`; tooling: `vitest`, `prettier`, `tsx`.
 4. `pnpm-workspace.yaml` diperbaiki (`allowBuilds`) — lihat §4.1.
-5. Lapisan domain katalog + logika keranjang/kuota + 22 unit test (commit `1c6b81b`).
+5. Lapisan domain katalog + logika keranjang/kuota + 22 unit test (commit `5fe4153`).
 6. Attribution capture, dataLayer GA4, store zustand (cart persist + reconcile, ui, toasts),
    drawer keranjang, header/footer, panel debug — di-commit menyusul bersama landing.
 7. Landing page CMS-driven + form lead + API leads (validasi/honeypot/rate-limit) + JSON-LD +
-   studio ter-embed (commit `0916ca6`). Dua kegagalan build nyata diperbaiki di sini (§4.3, §4.4).
+   studio ter-embed (commit `cb6ea49`). Dua kegagalan build nyata diperbaiki di sini (§4.3, §4.4).
 8. Marketplace lengkap: katalog (filter + mock states + error boundary), detail produk
    (galeri mockup, panel paket + kuota, view_item), keranjang, checkout + `/api/mock-payment`
-   dengan kalkulasi ulang di server (commit `0ebad22`).
+   dengan kalkulasi ulang di server (commit `0f6ec1c`).
 9. Blog list/detail (Portable Text, pagination dengan validasi parameter), sitemap, robots,
-   OG image brand (commit `51c520b`).
-10. Webhook revalidasi, seed script idempotent, 31 unit test tambahan (total 53) (commit `4fdf030`).
+   OG image brand (commit `5926633`).
+10. Webhook revalidasi, seed script idempotent, 31 unit test tambahan (total 53) (commit `5adb1d9`).
 11. Iterasi Lighthouse → perbaikan kontras/ARIA, laporan & screenshot di `docs/lighthouse/`
-    (commit `aca4ddb`), lint/typecheck/test/build bersih.
-12. README final + pembaruan AI_LOG (commit `e9a21ab`).
+    (commit `a36cb9a`), lint/typecheck/test/build bersih.
+12. README final + pembaruan AI_LOG (commit `b31e4b7`).
 13. Pemeriksaan ulang kepatuhan deliverable terhadap brief → README dilengkapi bagian wajib
     (waktu pengerjaan, asumsi, status & roadmap 1 minggu, rencana backend marketplace) dan
-    alasan pemilihan stack ditegaskan eksplisit (commit `fd23797` + commit lanjutan).
-14. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+    alasan pemilihan stack ditegaskan eksplisit (commit `6ec0af3` dan `1074445`).
+14. Normalisasi seluruh pesan commit ke **Conventional Commits** (rewrite message via
+    `git filter-branch --msg-filter`); konten tidak berubah — diverifikasi `git diff` kosong
+    terhadap HEAD lama — dan seluruh referensi hash di dokumen ini disinkronkan.
+15. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
