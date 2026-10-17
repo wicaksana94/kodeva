@@ -417,6 +417,10 @@ pnpm dlx vercel --prod
   - dataLayer: bentuk payload GA4, dedup, subscriber, event CTA.
   - UTM: parsing, prioritas, TTL 30 hari, data rusak.
 - `pnpm lint` + `pnpm typecheck` bersih; `pnpm build` hijau dengan Cache Components aktif.
+- Verifikasi interaksi di browser sungguhan (headless Chrome via CDP, bukan sekadar `curl`):
+  klik kartu blog berpindah ke halaman detail, siklus buka/tutup drawer keranjang utuh, dan
+  tidak ada overlay tak terlihat yang menelan klik (satu regresi nyata ditemukan & diperbaiki —
+  lihat AI_LOG §4.8).
 - Bukti Lighthouse mobile (Perf / A11y / BP / SEO): home **97/100/100/100**, katalog
   **99/100/100/100**, produk **99/100/100/100**, blog **96/100/100/100** — file lengkap di
   `docs/lighthouse/`.

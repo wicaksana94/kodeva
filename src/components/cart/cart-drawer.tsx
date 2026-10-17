@@ -66,11 +66,11 @@ export function CartDrawer() {
   }
 
   return (
-    <div className={`fixed inset-0 z-60 ${open ? '' : 'pointer-events-none'}`} aria-hidden={!open}>
+    <div className={`fixed inset-0 z-[60] ${open ? '' : 'pointer-events-none'}`} aria-hidden={!open}>
       <div
         onClick={closeCart}
-        className={`pointer-events-auto absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity duration-200 ${
-          open ? 'opacity-100' : 'opacity-0'
+        className={`absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity duration-200 ${
+          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
       <aside

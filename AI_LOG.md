@@ -153,6 +153,26 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
   benar, halaman detailnya `200`, dan tidak ada lagi kartu ber-`tabindex="-1"`;
   lint/typecheck/53 test tetap hijau.
 
+### 4.8 Overlay drawer keranjang tertutup memblokir seluruh klik halaman (ditemukan user)
+
+- **Nat:** laporan lanjutan user: "Baca selengkapnya" di kartu `/blog` tetap tidak bisa diklik.
+  Investigasi dengan browser headless (Chrome + CDP): `document.elementsFromPoint()` di titik
+  tengah kartu menunjukkan elemen teratas bukan isi kartu, melainkan backdrop drawer keranjang —
+  `fixed inset-0`, `opacity-0` (tak terlihat), tetapi **selalu** `pointer-events-auto`, sehingga
+  menelan setiap klik konten selama drawer tertutup. Klik mouse sungguhan pada titik itu memang
+  tidak mengubah URL.
+- **Kenapa lolos sejak awal:** seluruh verifikasi sebelumnya berbasis `curl`/HTML (markup benar,
+  tautan ada) — bug murni interaksi ini hanya muncul di browser sungguhan. Temuan sampingan saat
+  yang sama: class `z-60` tidak ter-generate Tailwind v4 (computed `z-index: auto`), sehingga
+  drawer terbuka pun tidak benar-benar berada di atas header; diganti `z-[60]`.
+- **Perbaikan (`src/components/cart/cart-drawer.tsx`):** backdrop hanya `pointer-events-auto`
+  saat drawer terbuka; saat tertutup `pointer-events-none`.
+- **Verifikasi (browser sungguhan, bukan `curl`):** sebelum perbaikan klik tidak berpindah;
+  sesudahnya klik mouse asli di kartu berpindah ke `/blog/<slug>`; alur drawer tetap utuh —
+  buka via tombol header (`pointer-events: auto`, `opacity: 1`, aside tidak `inert`), klik
+  backdrop menutup kembali (`none`, `0`, `inert`), lalu halaman tetap interaktif.
+  lint/typecheck/53 unit test tetap hijau.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -248,5 +268,8 @@ copy/konten); (d) pengecekan hasil deploy.)_
     masuk repository.
 17. Laporan user: console warning React key di `/blog` setelah data beralih ke Sanity → projection
     GROQ tidak meng-alias `_id` ke `id`; diperbaiki dan diverifikasi end-to-end (§4.7).
-18. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+18. Laporan lanjutan user: kartu artikel tetap tidak bisa diklik → investigasi browser headless
+    (Chrome + CDP) menemukan backdrop drawer tertutup memblokir seluruh klik halaman (plus class
+    `z-60` tidak valid); diperbaiki dan diverifikasi dengan klik mouse sungguhan (§4.8).
+19. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
