@@ -115,6 +115,10 @@ Lalu isi konten awal:
 pnpm seed    # idempotent: menulis landingPage, kategori, dan 3 artikel demo ke Sanity
 ```
 
+Agar Studio lokal bisa dipakai login, tambahkan `http://localhost:3000` di **CORS origins**
+project (sanity.io/manage → API) dengan opsi _Allow credentials_. Tanpa langkah itu situs tetap
+berjalan, tetapi Studio di browser akan gagal memuat data.
+
 ### Skrip yang tersedia
 
 | Skrip                                    | Fungsi                                |
@@ -389,8 +393,9 @@ pnpm dlx vercel --prod
 
 1. `pnpm dlx sanity login` → `pnpm dlx sanity projects create` (atau pakai project yang ada),
    lalu pastikan `projectId` di env Vercel sudah benar. Dataset `production` dibuat otomatis.
-2. Tambahkan domain deploy ke **CORS origins** (sanity.io/manage → API → CORS) — izinkan
-   `https://<domain-vercel>` (credentials: tidak perlu untuk dataset publik).
+2. Tambahkan domain ke **CORS origins** (sanity.io/manage → API → CORS): `http://localhost:3000`
+   (saat pengembangan) dan `https://<domain-vercel>` (produksi). Centang **Allow credentials**
+   agar login Studio dari origin tersebut bekerja.
 3. Isi konten: jalankan `pnpm seed` (lokal, dengan env produksi) atau salin dokumen lewat Studio.
 4. **Webhook revalidasi** (sanity.io/manage → API → Webhooks):
    - URL: `https://<domain-vercel>/api/revalidate`

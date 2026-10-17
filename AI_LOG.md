@@ -224,5 +224,10 @@ copy/konten); (d) pengecekan hasil deploy.)_
     terhadap HEAD lama — dan seluruh referensi hash di dokumen ini disinkronkan.
 15. Laporan user: `/studio` error saat dijalankan tanpa env Sanity → dibuat halaman panduan
     setup (`StudioSetupNotice`) dan diverifikasi (§4.6).
-16. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+16. Sanity lokal terhubung (project `smtzb99u`): `pnpm seed` mengisi 4 kategori + landing + 3
+    artikel; verifikasi end-to-end — marker test judul hero tampil di halaman, lead form
+    tersimpan sebagai dokumen `lead` di Sanity, dan `/studio` memuat shell Studio (bukan lagi
+    halaman panduan). Kredensial hanya berada di `.env.local` (gitignored) dan tidak pernah
+    masuk repository.
+17. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
