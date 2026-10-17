@@ -96,6 +96,4 @@ export interface PromoUsage {
   quota: number;
 }
 
-export type QuantityCheckResult =
-  | { ok: true }
-  | { ok: false; reason: string; maxAllowed: number };
+export type QuantityCheckResult = { ok: true } | { ok: false; reason: string; maxAllowed: number };
