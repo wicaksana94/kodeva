@@ -93,7 +93,8 @@ pnpm dev                     # http://localhost:3000
 
 Situs berjalan penuh **tanpa** Sanity: konten landing & artikel memakai fallback lokal
 (`src/sanity/fallback.ts`), lead tersimpan ke `.data/leads.jsonl`. Ini disengaja agar build &
-demo tidak pernah gagal karena env.
+demo tidak pernah gagal karena env. Route `/studio` mendeteksi kondisi ini dan menampilkan
+panduan setup langkah demi langkah (bukan error mentah).
 
 ### Mode dengan Sanity
 

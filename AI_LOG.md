@@ -121,6 +121,21 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
 - **Verifikasi:** katalog naik ke aksesibilitas 100; keempat halaman utama kini
   96–99 perf & 100 a11y/BP/SEO.
 
+### 4.6 Studio tanpa konfigurasi menampilkan error mentah (ditemukan user saat mencoba `/studio`)
+
+- **Nat:** user menjalankan `pnpm dev` lalu membuka `/studio` tanpa mengisi env Sanity.
+  Implementasi awal selalu me-render `NextStudio` dengan `projectId` placeholder
+  (`ganti-dengan-project-id`), sehingga browser menampilkan layar error Sanity yang membingungkan
+  alih-alih pesan "belum dikonfigurasi".
+- **Analisis:** mode fallback situs (tanpa kredensial) sudah dirancang sejak awal, tetapi route
+  `/studio` tidak punya jalur fallback yang setara — hanya kontennya yang fallback, bukan UI CMS.
+- **Perbaikan:** `src/app/studio/[[...tool]]/page.tsx` kini mengecek `isSanityConfigured`; bila
+  belum, dirender `StudioSetupNotice` — halaman server-rendered berisi 4 langkah setup (buat
+  project, isi `.env.local`, CORS, restart dev) dan tautan kembali ke situs.
+- **Verifikasi:** `curl /studio` pada dev & produksi memuat teks "Sanity Studio belum
+  dikonfigurasi" (server-rendered, HTTP 200); bila env Sanity diisi, jalur `StudioShell` lama
+  tetap dipakai. Lint/typecheck/test tetap hijau.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -207,5 +222,7 @@ copy/konten); (d) pengecekan hasil deploy.)_
 14. Normalisasi seluruh pesan commit ke **Conventional Commits** (rewrite message via
     `git filter-branch --msg-filter`); konten tidak berubah — diverifikasi `git diff` kosong
     terhadap HEAD lama — dan seluruh referensi hash di dokumen ini disinkronkan.
-15. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+15. Laporan user: `/studio` error saat dijalankan tanpa env Sanity → dibuat halaman panduan
+    setup (`StudioSetupNotice`) dan diverifikasi (§4.6).
+16. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
