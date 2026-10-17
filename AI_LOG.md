@@ -200,5 +200,9 @@ copy/konten); (d) pengecekan hasil deploy.)_
 10. Webhook revalidasi, seed script idempotent, 31 unit test tambahan (total 53) (commit `4fdf030`).
 11. Iterasi Lighthouse → perbaikan kontras/ARIA, laporan & screenshot di `docs/lighthouse/`
     (commit `aca4ddb`), lint/typecheck/test/build bersih.
-12. README final + pembaruan AI_LOG (dokumen ini). Berikutnya: deploy Vercel + Sanity (bersama
-    user), mengisi link deploy, lalu user mengisi §6.
+12. README final + pembaruan AI_LOG (commit `e9a21ab`).
+13. Pemeriksaan ulang kepatuhan deliverable terhadap brief → README dilengkapi bagian wajib
+    (waktu pengerjaan, asumsi, status & roadmap 1 minggu, rencana backend marketplace) dan
+    alasan pemilihan stack ditegaskan eksplisit (commit `fd23797` + commit lanjutan).
+14. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+    tersisa setelah sesi ini.
