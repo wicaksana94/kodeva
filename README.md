@@ -8,9 +8,8 @@ marketplace lisensi software (kasir, HR & payroll, add-on).
 - **Studio CMS (marketing):** `https://kodeva-dev.vercel.app/studio`
 - **AI log:** lihat [`AI_LOG.md`](./AI_LOG.md)
 - **Laporan Lighthouse:** lihat [`docs/lighthouse/`](./docs/lighthouse) (JSON + HTML + screenshot)
-- **Waktu pengerjaan:** ±1,5 jam, satu sesi pada 17 Oktober 2026 (implementasi 09:45–10:20 WIB
-  menurut riwayat commit, di luar analisis brief & sesi tanya-jawab awal), ditambah sesi
-  lanjutan untuk deploy produksi + fitur bonus (region selector). Rincian per
+- **Waktu pengerjaan:** 17 Oktober 2026 — 5 sesi kerja (09:45–11:24, 12:39–14:30,
+  15:00–16:30, 18:30–20:00, 21:00–22:00 WIB), total **7 jam 30 menit**. Rincian per
   milestone ada di commit history dan [`AI_LOG.md`](./AI_LOG.md).
 
 > Semua konten (produk, harga, testimoni, artikel, kontak) adalah data dummy untuk keperluan
