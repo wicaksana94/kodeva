@@ -73,7 +73,7 @@ Sesuai instruksi brief ("kalau ada hal yang ambigu, tanyakan atau tulis asumsi")
 - **Perbaikan final:** `allowBuilds: { esbuild: true, sharp: true }` di `pnpm-workspace.yaml`.
 - **Verifikasi:** `pnpm install` menjalankan postinstall esbuild (`postinstall: Done`) dan
   `node_modules/.bin/esbuild --version` → `0.28.2`. Perubahan ikut ter-commit
-  (`chore: scaffold Next.js 16 + TypeScript + Tailwind with tooling`, `3a7e938`).
+  (`chore: scaffold Next.js 16 + TypeScript + Tailwind with tooling`, `3c24049`).
 - **Iterasi saat deploy Vercel:** instalasi CI yang segar masih gagal karena dep transitif baru
   (`ERR_PNPM_IGNORED_BUILDS: unrs-resolver@1.12.2`; postinstall-nya hanya verifikasi binding
   napi — binernya sudah dibawa `optionalDependencies`). Ditambahkan `unrs-resolver: false`
@@ -356,23 +356,23 @@ copy/konten); (d) pengecekan hasil deploy.)_
 3. Scaffold `kodeva`: Next.js 16 (App Router, Cache Components) + TypeScript + Tailwind 4;
    dependency: `sanity`, `next-sanity`, `zustand`, `zod`; tooling: `vitest`, `prettier`, `tsx`.
 4. `pnpm-workspace.yaml` diperbaiki (`allowBuilds`) — lihat §4.1.
-5. Lapisan domain katalog + logika keranjang/kuota + 22 unit test (commit `5fe4153`).
+5. Lapisan domain katalog + logika keranjang/kuota + 22 unit test (commit `61aac0e`).
 6. Attribution capture, dataLayer GA4, store zustand (cart persist + reconcile, ui, toasts),
    drawer keranjang, header/footer, panel debug — di-commit menyusul bersama landing.
 7. Landing page CMS-driven + form lead + API leads (validasi/honeypot/rate-limit) + JSON-LD +
-   studio ter-embed (commit `cb6ea49`). Dua kegagalan build nyata diperbaiki di sini (§4.3, §4.4).
+   studio ter-embed (commit `f8e9fce`). Dua kegagalan build nyata diperbaiki di sini (§4.3, §4.4).
 8. Marketplace lengkap: katalog (filter + mock states + error boundary), detail produk
    (galeri mockup, panel paket + kuota, view_item), keranjang, checkout + `/api/mock-payment`
-   dengan kalkulasi ulang di server (commit `0f6ec1c`).
+   dengan kalkulasi ulang di server (commit `81df9e8`).
 9. Blog list/detail (Portable Text, pagination dengan validasi parameter), sitemap, robots,
-   OG image brand (commit `5926633`).
-10. Webhook revalidasi, seed script idempotent, 31 unit test tambahan (total 53) (commit `5adb1d9`).
+   OG image brand (commit `c6dbfbd`).
+10. Webhook revalidasi, seed script idempotent, 31 unit test tambahan (total 53) (commit `331aea0`).
 11. Iterasi Lighthouse → perbaikan kontras/ARIA, laporan & screenshot di `docs/lighthouse/`
-    (commit `a36cb9a`), lint/typecheck/test/build bersih.
-12. README final + pembaruan AI_LOG (commit `b31e4b7`).
+    (commit `df9fff8`), lint/typecheck/test/build bersih.
+12. README final + pembaruan AI_LOG (commit `3b33a21`).
 13. Pemeriksaan ulang kepatuhan deliverable terhadap brief → README dilengkapi bagian wajib
     (waktu pengerjaan, asumsi, status & roadmap 1 minggu, rencana backend marketplace) dan
-    alasan pemilihan stack ditegaskan eksplisit (commit `6ec0af3` dan `1074445`).
+    alasan pemilihan stack ditegaskan eksplisit (commit `ca8c8a3` dan `fe65489`).
 14. Normalisasi seluruh pesan commit ke **Conventional Commits** (rewrite message via
     `git filter-branch --msg-filter`); konten tidak berubah — diverifikasi `git diff` kosong
     terhadap HEAD lama — dan seluruh referensi hash di dokumen ini disinkronkan.
@@ -415,8 +415,11 @@ expire: 300}` (kesegaran tetap dari `revalidate`) dan rute detail di-opt-out
 26. Deploy produksi: project Vercel `kodeva` live di https://kodeva-dev.vercel.app (domain
     produksi di-set ke `kodeva-dev`; `NEXT_PUBLIC_SITE_URL` disesuaikan + redeploy) — deploy
     pertama gagal `ERR_PNPM_IGNORED_BUILDS: unrs-resolver` (fix `allowBuilds`, commit
-    `a478620`); repo publik ter-push ke https://github.com/wicaksana94/kodeva. Sisa langkah
+    `51a3bb8`); repo publik ter-push ke https://github.com/wicaksana94/kodeva. Sisa langkah
     penutup: CORS + webhook Sanity (menunggu login CLI user), undangan reviewer, pengisian §6
     oleh user, dan email ke panitia.
 27. Permintaan user: pemilih region di navbar (bendera ID default, MY & SG) — Indonesia no-op,
     MY/SG memunculkan dialog "Segera hadir"; diverifikasi headless pada build produksi (§4.15).
+28. Normalisasi format pesan commit ke Conventional Commits — reword root Create Next App
+    (`chore: bootstrap repository from Create Next App`) dan edit README via GitHub web
+    (`docs: simplify README title and description`); referensi hash di dokumen ini diperbarui.
