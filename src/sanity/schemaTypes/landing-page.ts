@@ -100,6 +100,15 @@ export const landingPage = defineType({
             defineField({ name: 'alt', title: 'Teks alternatif (aksesibilitas)', type: 'string' }),
           ],
         }),
+        defineField({
+          name: 'mockupProductId',
+          title: 'Produk mockup (bila gambar hero kosong)',
+          type: 'string',
+          options: { list: productOptions },
+          initialValue: 'kasir-prima',
+          description:
+            'Produk yang tampil sebagai mockup di hero bila "Gambar hero" belum diisi. Default: Kasir Prima.',
+        }),
         defineField({ name: 'ctaPrimaryLabel', title: 'Label tombol utama', type: 'string' }),
         defineField({ name: 'ctaPrimaryHref', title: 'Link tombol utama', type: 'string' }),
         defineField({ name: 'ctaSecondaryLabel', title: 'Label tombol sekunder', type: 'string' }),

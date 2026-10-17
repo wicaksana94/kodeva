@@ -157,8 +157,8 @@ bagian dinamisnya.
 
 ### 4.2 Konten CMS, data domain di kode
 
-Copy marketing sepenuhnya di CMS (termasuk statistik hero, foto testimoni, dan label CTA di
-landing); namun **produk, harga, dan kuota promo** sengaja hidup di
+Copy marketing sepenuhnya di CMS (termasuk banner + teks promo mingguan, produk mockup hero,
+statistik, foto testimoni, dan label CTA di landing); namun **produk, harga, dan kuota promo** sengaja hidup di
 `src/lib/catalog/data.ts` (typed). Alasannya: integritas data transaksi tidak cocok
 diedit-bebas dari CMS tanpa validasi bisnis; schema Sanity untuk landing/artikel memakai
 `options.list` yang di-generate dari file yang sama sehingga marketing tetap memilih dari daftar
@@ -245,7 +245,8 @@ utama). Rincian iterasi (termasuk kesalahan yang ditemukan) ada di `AI_LOG.md` �
   state loading/error/kosong, mobile-friendly.
 - **C. Marketing:** Lighthouse mobile Performance **97** di landing (target ≥80); event GA4
   (`view_item`, `add_to_cart`, `begin_checkout`, `cta_click`) terbukti terkirim via
-  `?debug=events` dan tidak dobel saat re-render; UTM last-touch 30 hari ikut di payload lead
+  `?debug=events` dan tidak dobel saat re-render — termasuk klik tombol produk unggulan di
+  landing (`cta_click` `featured-product-*`); UTM last-touch 30 hari ikut di payload lead
   dan order.
 - **Dokumentasi:** README ini + `AI_LOG.md` + 53 unit test + laporan Lighthouse di
   `docs/lighthouse/`.
@@ -370,11 +371,13 @@ docs/lighthouse/       # bukti audit (JSON/HTML/PNG)
 ## 9. Untuk tim marketing (cara pakai CMS)
 
 1. Buka `/studio` (login sekali dengan akun Sanity yang diundang).
-2. **Landing Page** (singleton): edit hero (judul, gambar, statistik singkat), produk unggulan
+2. **Landing Page** (singleton): edit hero (eyebrow, judul, gambar banner, statistik singkat,
+   produk mockup saat tanpa gambar), **teks promo mingguan** (nama campaign + label/catatan
+   promo — selalu tampil di hero, dengan atau tanpa banner), produk unggulan
    (pilih dari daftar produk valid + label tombol), testimoni (teks + foto opsional — kosong =
    inisial nama), FAQ, dan copy form lead — semua berlabel Bahasa Indonesia, dikelompokkan per
    seksi. Klik **Publish** → webhook memicu revalidasi → perubahan tampil dalam hitungan detik (di
-localhost tanpa webhook: ≤ ±1 menit — TTL development).
+   localhost tanpa webhook: ≤ ±1 menit — TTL development).
 3. **Artikel Blog**: buat draft → isi judul/ringkasan/kategori/body (mendukung heading, kutipan,
    list, tautan, gambar) → pilih produk terkait → **Publish**.
 4. **Lead yang masuk** tampil sebagai dokumen `Lead` di Studio (nama, kontak, UTM asal) — siap

@@ -18,6 +18,7 @@ export interface HeroContent {
   subtitle: string;
   image: SanityImage | null;
   imageAlt: string;
+  mockupProductId?: string | null;
   stats: HeroStat[];
   ctaPrimaryLabel: string;
   ctaPrimaryHref: string;

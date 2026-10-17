@@ -219,6 +219,25 @@ test hijau.
   lalu tampil di halaman **tanpa restart** (91 detik — dominan propagasi CDN Sanity), lantas
   dipulihkan dan dicek via query API. `pnpm build` (branch produksi `cacheLife`) hijau: 28 rute.
 
+### 4.12 Audit hero dari pesan Head of Marketing — promo tak tampil saat banner diisi + mockup hardcoded
+
+- **Nat:** permintaan "hero section harus customizable" (konteks: marketing ganti banner/promo
+  mingguan tanpa developer) memicu audit alur hero. Hampir semua sudah CMS-driven, tetapi ada dua
+  gap nyata: (a) teks `promoLabel`/`promoNote` hanya dirender di kasus *tanpa* gambar hero —
+  begitu marketing mengunggah banner mingguan, teks promo justru hilang; (b) produk mockup hero
+  (kasus tanpa banner) hardcoded `getProductBySlug('kasir-prima')` di `page.tsx` sehingga produk
+  yang ditampilkan tidak bisa diganti dari Studio.
+- **Perbaikan:** baris promo dipindah ke kolom teks hero (selalu tampil selama label/catatan
+  promo terisi, dengan fallback nama campaign) dan caption di mockup dihapus; field baru
+  `hero.mockupProductId` (dropdown produk valid, `initialValue` kasir-prima, fallback + seed ikut
+  diperbarui). Sekaligus melengkapi metrik "klik tombol dari landing": klik tombol kartu produk
+  unggulan kini mengirim `cta_click` (`featured-product-*`) lewat `TrackedCardCta` — varian
+  non-link yang aman dipakai di dalam kartu ber-`<Link>` (tidak ada `<a>` bersarang).
+- **Verifikasi:** marker test terhadap CMS live (teks promo diganti `[[HOOK-PROMO]]` → tampil di
+  HTML; `hero.mockupProductId` diganti produk lain → nama produk di mockup berubah), lalu
+  dipulihkan; klik tombol kartu unggulan di browser headless memunculkan event `cta_click` di
+  `?debug=events`. lint/typecheck/53 test + build hijau.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -330,5 +349,9 @@ copy/konten); (d) pengecekan hasil deploy.)_
 22. Permintaan user: tombol CTA di card katalog — tombol "Lihat Detail" ditambahkan di tiap card
     `/katalog` (seluruh card tetap satu tautan; ikon chevron + gaya tombol utama); diverifikasi
     browser headless: 8/8 card menampilkan CTA.
-23. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+23. Pesan Head of Marketing (banner/promo mingguan tanpa developer, tracking klik beli dari
+    landing, SEO, preview WhatsApp, ekspansi MY/SG) memicu audit hero: teks promo kini selalu
+    tampil walau banner diisi, produk mockup hero dapat dipilih di CMS, dan klik tombol kartu
+    produk unggulan ter-track `cta_click`; diverifikasi marker test + klik headless (§4.12).
+24. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.

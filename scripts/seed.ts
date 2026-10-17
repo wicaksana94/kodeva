@@ -57,6 +57,7 @@ async function main() {
       title: hero.title,
       subtitle: hero.subtitle,
       stats: withKeys(hero.stats, 'stat'),
+      mockupProductId: hero.mockupProductId,
       ctaPrimaryLabel: hero.ctaPrimaryLabel,
       ctaPrimaryHref: hero.ctaPrimaryHref,
       ctaSecondaryLabel: hero.ctaSecondaryLabel,

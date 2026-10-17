@@ -54,6 +54,7 @@ export const fallbackLanding: LandingContent = {
       'Aplikasi kasir, HR & payroll, dan add-on pendukung dalam satu ekosistem lisensi. Diskon hingga 25% sepanjang Promo Akhir Tahun.',
     image: null,
     imageAlt: 'Tangkapan layar aplikasi Kodeva',
+    mockupProductId: 'kasir-prima',
     stats: [
       { value: '15.000+', label: 'bisnis memakai' },
       { value: '4,8/5', label: 'rating pengguna' },

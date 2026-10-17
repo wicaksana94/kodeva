@@ -4,19 +4,36 @@ import { formatIDR } from '@/lib/money';
 import { categorySoftBadge } from '@/lib/ui/accents';
 import type { Product } from '@/lib/catalog/types';
 import { ProductMockup } from './product-mockup';
+import { TrackedCardCta } from './tracked-card-cta';
 
 interface ProductCardProps {
   product: Product;
   priorityMockup?: boolean;
+  analyticsCta?: { ctaId: string; location: string; campaign?: string };
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, analyticsCta }: ProductCardProps) {
   const category = getCategoryById(product.categoryId);
   const promoActive = productHasActivePromo(product);
   const lowestPrice = getLowestUnitPrice(product);
   const lowestList = Math.min(...product.packages.map((pkg) => pkg.pricePerLicensePerMonth));
   const discounted = promoActive && lowestPrice < lowestList;
   const licenseUnit = product.licenseUnit === 'user' ? 'pengguna' : 'outlet';
+
+  const ctaClass =
+    'mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition group-hover:bg-indigo-700';
+  const ctaBody = (
+    <>
+      Lihat Detail
+      <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className="size-4">
+        <path
+          fillRule="evenodd"
+          d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+          clipRule="evenodd"
+        />
+      </svg>
+    </>
+  );
 
   return (
     <Link
@@ -68,16 +85,20 @@ export function ProductCard({ product }: ProductCardProps) {
               Sisa kuota promo: {product.promoQuota.remaining} lisensi
             </p>
           )}
-          <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition group-hover:bg-indigo-700">
-            Lihat Detail
-            <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className="size-4">
-              <path
-                fillRule="evenodd"
-                d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </span>
+          {analyticsCta ? (
+            <TrackedCardCta
+              className={ctaClass}
+              ctaId={analyticsCta.ctaId}
+              ctaText={`Lihat Detail — ${product.name}`}
+              location={analyticsCta.location}
+              destination={`/produk/${product.slug}`}
+              campaign={analyticsCta.campaign}
+            >
+              {ctaBody}
+            </TrackedCardCta>
+          ) : (
+            <span className={ctaClass}>{ctaBody}</span>
+          )}
         </div>
       </div>
     </Link>

@@ -31,7 +31,8 @@ export default async function LandingPage() {
   const campaignName = content.campaignName || DEFAULT_CAMPAIGN.name;
   const featuredProducts = getProductsByIds(content.featuredProductIds);
   const heroImageSrc = sanityImageSrc(content.hero.image);
-  const heroMockupProduct = getProductBySlug('kasir-prima');
+  const heroMockupProduct =
+    getProductBySlug(content.hero.mockupProductId ?? 'kasir-prima') ?? getProductBySlug('kasir-prima');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
@@ -105,6 +106,15 @@ export default async function LandingPage() {
                 />
               )}
             </div>
+            {(content.promoLabel || content.promoNote) && (
+              <p className="mt-5 flex items-center gap-2 text-sm font-semibold text-amber-800">
+                <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-amber-500" />
+                <span>
+                  {content.promoLabel ?? campaignName}
+                  {content.promoNote ? ` — ${content.promoNote}` : ''}
+                </span>
+              </p>
+            )}
             <dl className="mt-8 grid max-w-md grid-cols-3 gap-4">
               {content.hero.stats.map((stat) => (
                 <div key={stat._key ?? stat.label}>
@@ -140,10 +150,6 @@ export default async function LandingPage() {
                     />
                   )}
                 </div>
-                <p className="relative mt-4 text-center text-xs font-medium text-indigo-100">
-                  {content.promoLabel ?? campaignName} —{' '}
-                  {content.promoNote ?? 'diskon hingga 25% selama kuota tersedia'}
-                </p>
               </div>
             )}
           </div>
@@ -162,7 +168,15 @@ export default async function LandingPage() {
         </div>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              analyticsCta={{
+                ctaId: `featured-product-${product.id}`,
+                location: 'featured-products',
+                campaign: campaignName,
+              }}
+            />
           ))}
         </div>
         <div className="mt-8 text-center">
