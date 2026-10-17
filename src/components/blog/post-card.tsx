@@ -8,7 +8,7 @@ export function PostCard({ post }: { post: PostSummary }) {
   const coverSrc = sanityImageSrc(post.cover);
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg">
-      <Link href={`/blog/${post.slug}`} className="flex h-full flex-col" tabIndex={-1}>
+      <Link href={`/blog/${post.slug}`} className="flex h-full flex-col">
         <div className="relative aspect-[16/9] overflow-hidden border-b border-slate-100 bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-600">
           {coverSrc ? (
             <Image

@@ -19,7 +19,7 @@ export const landingPageQuery = /* groq */ `
 }`;
 
 export const postSummaryFields = /* groq */ `
-  _id,
+  "id": _id,
   title,
   "slug": slug.current,
   excerpt,

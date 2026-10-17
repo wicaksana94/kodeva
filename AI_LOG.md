@@ -136,6 +136,23 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
   dikonfigurasi" (server-rendered, HTTP 200); bila env Sanity diisi, jalur `StudioShell` lama
   tetap dipakai. Lint/typecheck/test tetap hijau.
 
+### 4.7 React key hilang di `/blog` saat data beralih ke Sanity (ditemukan user)
+
+- **Nat:** setelah Sanity tersambung, `/blog` memunculkan console error
+  `Each child in a list should have a unique "key" prop` di `blog-list.tsx` — React memakai
+  `key={post.id}` tetapi `post.id` bernilai `undefined`. Penyebabnya: projection GROQ
+  (`postSummaryFields`) mengambil `_id` tanpa di-alias ke `id`, sementara tipe `PostSummary`
+  (dan seluruh komponen) mengharapkan `id: string`.
+- **Kenapa lolos sejak awal:** selama konten masih memakai fallback lokal — yang datanya memiliki
+  field `id` — jalur ini tidak pernah dieksekusi. Bug batas-data seperti ini hanya muncul setelah
+  integrasi CMS sungguhan; unit test fungsi murni tidak akan menangkapnya.
+- **Perbaikan:** alias `"id": _id` pada projection; sekalian menghapus `tabIndex={-1}` di tautan
+  kartu artikel (kartu sebelumnya tidak dapat difokus dengan keyboard — temuan a11y saat
+  investigasi).
+- **Verifikasi:** query Sanity mengembalikan `id`; `/blog` merender 3 tautan `/blog/<slug>` yang
+  benar, halaman detailnya `200`, dan tidak ada lagi kartu ber-`tabindex="-1"`;
+  lint/typecheck/53 test tetap hijau.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -229,5 +246,7 @@ copy/konten); (d) pengecekan hasil deploy.)_
     tersimpan sebagai dokumen `lead` di Sanity, dan `/studio` memuat shell Studio (bukan lagi
     halaman panduan). Kredensial hanya berada di `.env.local` (gitignored) dan tidak pernah
     masuk repository.
-17. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+17. Laporan user: console warning React key di `/blog` setelah data beralih ke Sanity → projection
+    GROQ tidak meng-alias `_id` ke `id`; diperbaiki dan diverifikasi end-to-end (§4.7).
+18. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
