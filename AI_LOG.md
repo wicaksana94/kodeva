@@ -199,8 +199,25 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
   dataset di-seed ulang.
 - **Verifikasi:** query API memastikan `_key` ada di ketiga array; marker test FAQ end-to-end —
   `faqItems[0].question` diganti `[[CMS-FAQ]]` via API, **tampil di HTML halaman** (render dari
-  Sanity, log server tanpa error fetch), lalu dikembalikan ke teks asli. lint/typecheck/53
-  test hijau.
+Sanity, log server tanpa error fetch), lalu dikembalikan ke teks asli. lint/typecheck/53
+test hijau.
+
+### 4.11 Urutan FAQ di web tidak ikut Studio — cache konten basi di development (ditemukan user)
+
+- **Nat:** user menggeser/mengubah item FAQ di Studio, tetapi situs lokal masih menampilkan urutan
+  lama. Dokumen di dataset sudah benar (dicek via query API; tidak ada draft) — yang basi adalah
+  cache konten: webhook revalidasi Sanity tidak bisa memanggil `localhost`, sehingga di dev
+  perubahan menunggu TTL produksi (5–10 menit) dan revalidasi latar sering gagal karena jaringan.
+- **Perbaikan:** `cacheLife` kini sadar environment — development `{stale: 5, revalidate: 15,
+  expire: 60}` detik, produksi tetap `{stale: 300, revalidate: 600, expire: 86400}`. Percobaan
+  pertama memakai konstanta bersama berisi ternary `process.env.NODE_ENV`; Next menandainya
+  sebagai data uncached ("uncached data during prerendering" berulang di log dev), sehingga nilai
+  akhir ditulis **literal** di cabang `if/else` dalam tiap fungsi `"use cache"` agar tetap dapat
+  dianalisis statis.
+- **Verifikasi:** dev server uji di port terpisah (salinan project, server dev user tidak
+  diganggu): log tanpa "uncached data"; marker `[[TTL2]]` pada `featuredCtaLabel` ditulis via API
+  lalu tampil di halaman **tanpa restart** (91 detik — dominan propagasi CDN Sanity), lantas
+  dipulihkan dan dicek via query API. `pnpm build` (branch produksi `cacheLife`) hijau: 28 rute.
 
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
@@ -306,5 +323,9 @@ copy/konten); (d) pengecekan hasil deploy.)_
 20. Laporan user: konten FAQ tidak bisa dikelola lewat Studio → item array hasil seed tidak
     punya `_key`; `stripKeys` diganti `withKeys` (deterministik), dokumen di-seed ulang, dan
     diverifikasi marker test FAQ end-to-end (§4.10).
-21. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+21. Laporan user: urutan FAQ di web tidak sesuai Studio → akar masalahnya cache konten basi di
+    development (webhook tidak bisa menghubungi localhost); `cacheLife` dibuat sadar environment
+    (dev 5/15/60 detik, produksi 5/10 menit) dengan nilai literal, diverifikasi marker test tanpa
+    restart + build hijau (§4.11).
+22. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.

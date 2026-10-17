@@ -13,14 +13,11 @@ import type { LandingContent, PostDetail, PostSummary } from './types';
 
 export const POSTS_PAGE_SIZE = 6;
 
-/**
- * Cache lifecycle konten CMS:
- * - `stale`/`revalidate`: jaring pengaman agar perubahan tetap muncul (maks. 10 menit)
- *   walau webhook revalidasi tidak berjalan.
- * - `cacheTag`: webhook dari Sanity memanggil revalidateTag() sehingga perubahan
- *   tampil dalam hitungan detik setelah publish.
+/*
+ * Catatan `cacheLife`: nilai ditulis literal di dalam tiap fungsi `"use cache"`
+ * (bukan lewat konstanta bersama) karena Next.js menganalisis argumen `cacheLife`
+ * secara statis; konfigurasi non-literal membuat fungsi dianggap tidak ter-cache.
  */
-const CONTENT_CACHE_LIFE = { stale: 300, revalidate: 600, expire: 86400 } as const;
 
 function normalizeLanding(doc: Partial<LandingContent>): LandingContent {
   return {
@@ -58,7 +55,14 @@ function normalizeLanding(doc: Partial<LandingContent>): LandingContent {
 
 export async function getLandingContent(): Promise<LandingContent> {
   'use cache';
-  cacheLife(CONTENT_CACHE_LIFE);
+  if (process.env.NODE_ENV === 'development') {
+    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
+    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+  } else {
+    // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
+    cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
+  }
   cacheTag('landing');
 
   if (!isSanityConfigured) return fallbackLanding;
@@ -106,7 +110,14 @@ function toSummary(post: PostDetail): PostSummary {
 
 export async function getPostsPage(page: number): Promise<PostsPage> {
   'use cache';
-  cacheLife(CONTENT_CACHE_LIFE);
+  if (process.env.NODE_ENV === 'development') {
+    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
+    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+  } else {
+    // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
+    cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
+  }
   cacheTag('posts');
 
   const safePage = Math.max(1, Math.floor(page) || 1);
@@ -132,7 +143,14 @@ export async function getPostsPage(page: number): Promise<PostsPage> {
 
 export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
   'use cache';
-  cacheLife(CONTENT_CACHE_LIFE);
+  if (process.env.NODE_ENV === 'development') {
+    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
+    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+  } else {
+    // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
+    cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
+  }
   cacheTag('posts', `post-${slug}`);
 
   if (!isSanityConfigured) {
@@ -150,7 +168,14 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
 
 export async function getPostSlugs(): Promise<string[]> {
   'use cache';
-  cacheLife(CONTENT_CACHE_LIFE);
+  if (process.env.NODE_ENV === 'development') {
+    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
+    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+  } else {
+    // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
+    cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
+  }
   cacheTag('posts');
 
   if (!isSanityConfigured) return fallbackPosts.map((post) => post.slug);
