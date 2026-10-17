@@ -283,12 +283,17 @@ expire: 60}` detik, produksi tetap `{stale: 300, revalidate: 600, expire: 86400}
 - **Implementasi:** `src/components/site/region-selector.tsx` — bendera SVG inline (tanpa aset
   eksternal), menu `role="menu"` dengan `aria-haspopup`/`aria-expanded`, ESC & klik di luar
   menutup, checkmark pada region aktif; dialog "Segera hadir di …" mengikuti pola aksesibilitas
-  CartDrawer (fokus pindah ke tombol, ESC/backdrop menutup, scroll terkunci, fokus dipulihkan).
-  Indonesia tetap region aktif — MY/SG tidak mengubah pilihan, hanya menampilkan dialog.
+  CartDrawer (fokus pindah ke tombol, ESC & klik di luar menutup, scroll terkunci, fokus
+  dipulihkan). Indonesia tetap region aktif — MY/SG tidak mengubah pilihan, hanya menampilkan
+  dialog.
+- **Revisi user:** backdrop gelap dihapus (overlay transparan) dan dialog dipindah ke portal
+  `document.body` — tanpa portal, `fixed` terikat containing block header (`backdrop-filter`
+  pada header membuatnya jadi containing block), sehingga dialog tidak center di viewport dan
+  klik di luar area header tidak menutup.
 - **Verifikasi:** headless CDP pada build produksi lokal — 3 item menu benar + `aria-expanded`,
-  dialog Malaysia & Singapore tampil dengan judul per region, tutup via tombol & ESC, fokus awal
-  di dalam dialog, klik Indonesia tanpa dialog; viewport 390px tanpa overflow horizontal;
-  lint/typecheck/53 test + build hijau.
+  dialog Malaysia & Singapore tampil dengan judul per region, tutup via tombol, ESC & klik di
+  luar, fokus awal di dalam dialog, klik Indonesia tanpa dialog; viewport 390px tanpa overflow
+  horizontal; lint/typecheck/53 test + build hijau.
 
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
@@ -420,6 +425,7 @@ expire: 300}` (kesegaran tetap dari `revalidate`) dan rute detail di-opt-out
     oleh user, dan email ke panitia.
 27. Permintaan user: pemilih region di navbar (bendera ID default, MY & SG) — Indonesia no-op,
     MY/SG memunculkan dialog "Segera hadir"; diverifikasi headless pada build produksi (§4.15).
+    Revisi user: backdrop dihapus + dialog via portal agar center viewport (§4.15).
 28. Normalisasi format pesan commit ke Conventional Commits — reword root Create Next App
     (`chore: bootstrap repository from Create Next App`) dan edit README via GitHub web
     (`docs: simplify README title and description`); referensi hash di dokumen ini diperbarui.

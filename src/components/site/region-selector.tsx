@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 type RegionCode = 'id' | 'my' | 'sg';
 
@@ -109,13 +110,9 @@ function ComingSoonDialog({ region, onClose }: { region: RegionCode; onClose: ()
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[65] grid place-items-center p-4">
-      <div
-        onClick={onClose}
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"
-        aria-hidden="true"
-      />
+      <div onClick={onClose} className="absolute inset-0" aria-hidden="true" />
       <div
         role="dialog"
         aria-modal="true"
@@ -145,7 +142,8 @@ function ComingSoonDialog({ region, onClose }: { region: RegionCode; onClose: ()
           Baik, mengerti
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
