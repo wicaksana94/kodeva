@@ -38,7 +38,9 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                  active ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  active
+                    ? 'bg-indigo-50 text-indigo-700'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
                 {item.label}

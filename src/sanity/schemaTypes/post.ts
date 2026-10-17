@@ -30,7 +30,8 @@ export const post = defineType({
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().max(240),
-      description: 'Muncul di daftar artikel dan pratinjau saat dibagikan di WhatsApp/sosial media.',
+      description:
+        'Muncul di daftar artikel dan pratinjau saat dibagikan di WhatsApp/sosial media.',
     }),
     defineField({
       name: 'cover',
@@ -83,7 +84,12 @@ export const post = defineType({
                 title: 'Tautan',
                 type: 'object',
                 fields: [
-                  defineField({ name: 'href', title: 'URL', type: 'url', validation: (rule) => rule.required() }),
+                  defineField({
+                    name: 'href',
+                    title: 'URL',
+                    type: 'url',
+                    validation: (rule) => rule.required(),
+                  }),
                 ],
               },
             ],
@@ -98,7 +104,8 @@ export const post = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: { list: productOptions },
-      description: 'Artikel menautkan produk marketplace; tampil sebagai kartu produk di bawah artikel.',
+      description:
+        'Artikel menautkan produk marketplace; tampil sebagai kartu produk di bawah artikel.',
     }),
   ],
   orderings: [

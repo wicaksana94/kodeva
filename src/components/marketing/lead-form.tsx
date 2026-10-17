@@ -2,11 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  fieldErrorsFromZod,
-  leadRequestSchema,
-  type LeadRequest,
-} from '@/lib/leads/schema';
+import { fieldErrorsFromZod, leadRequestSchema, type LeadRequest } from '@/lib/leads/schema';
 import { getStoredAttribution } from '@/lib/analytics/utm';
 
 type ContactType = 'email' | 'whatsapp';
@@ -94,13 +90,25 @@ export function LeadForm({ source = 'landing-lead-form' }: LeadFormProps) {
 
   if (status === 'success') {
     return (
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center" role="status">
+      <div
+        className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center"
+        role="status"
+      >
         <div className="mx-auto grid size-12 place-items-center rounded-full bg-emerald-600 text-white">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="size-6">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            className="size-6"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
           </svg>
         </div>
-        <h3 className="mt-3 text-lg font-bold text-emerald-900">Terima kasih, {name.split(' ')[0]}!</h3>
+        <h3 className="mt-3 text-lg font-bold text-emerald-900">
+          Terima kasih, {name.split(' ')[0]}!
+        </h3>
         <p className="mt-1 text-sm text-emerald-800">
           Data Anda sudah kami terima. Tim Kodeva akan menghubungi Anda melalui{' '}
           {contactType === 'email' ? 'email' : 'WhatsApp'} dalam 1×24 jam kerja.
@@ -117,7 +125,11 @@ export function LeadForm({ source = 'landing-lead-form' }: LeadFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+    >
       <div className="space-y-4">
         <div>
           <label htmlFor="lead-name" className="block text-sm font-semibold text-slate-800">
@@ -201,7 +213,10 @@ export function LeadForm({ source = 'landing-lead-form' }: LeadFormProps) {
           )}
         </div>
 
-        <div className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+        <div
+          className="absolute top-auto -left-[9999px] h-px w-px overflow-hidden"
+          aria-hidden="true"
+        >
           <label htmlFor="lead-website">Website (kosongkan)</label>
           <input
             id="lead-website"
@@ -215,7 +230,10 @@ export function LeadForm({ source = 'landing-lead-form' }: LeadFormProps) {
         </div>
 
         {submitError && (
-          <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          <p
+            role="alert"
+            className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          >
             {submitError}
           </p>
         )}

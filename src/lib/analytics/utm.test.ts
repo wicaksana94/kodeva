@@ -61,10 +61,7 @@ describe('penyimpanan atribusi', () => {
     })!;
     saveAttribution(attribution, storage);
 
-    const found = getStoredAttribution(
-      { now: new Date('2026-10-10T00:00:00.000Z') },
-      storage,
-    );
+    const found = getStoredAttribution({ now: new Date('2026-10-10T00:00:00.000Z') }, storage);
     expect(found?.utmSource).toBe('newsletter');
   });
 
@@ -75,10 +72,7 @@ describe('penyimpanan atribusi', () => {
     })!;
     saveAttribution(attribution, storage);
 
-    const found = getStoredAttribution(
-      { now: new Date('2026-02-15T00:00:00.000Z') },
-      storage,
-    );
+    const found = getStoredAttribution({ now: new Date('2026-02-15T00:00:00.000Z') }, storage);
     expect(found).toBeNull();
   });
 

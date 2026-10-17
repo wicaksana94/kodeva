@@ -65,8 +65,8 @@ export async function CatalogResults({ searchParams }: { searchParams: SearchPar
         <div className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-slate-50 py-16 text-center">
           <p className="text-lg font-bold text-slate-800">Belum ada produk di kategori ini</p>
           <p className="mt-1 text-sm text-slate-500">
-            Ini adalah mode demo <code className="rounded bg-slate-200 px-1">?mock=empty</code>. Pada
-            data nyata, beri tahu tim kami produk yang Anda butuhkan.
+            Ini adalah mode demo <code className="rounded bg-slate-200 px-1">?mock=empty</code>.
+            Pada data nyata, beri tahu tim kami produk yang Anda butuhkan.
           </p>
           <Link
             href="/katalog"
@@ -92,15 +92,7 @@ export async function CatalogResults({ searchParams }: { searchParams: SearchPar
   );
 }
 
-function FilterChip({
-  href,
-  label,
-  active,
-}: {
-  href: string;
-  label: string;
-  active: boolean;
-}) {
+function FilterChip({ href, label, active }: { href: string; label: string; active: boolean }) {
   return (
     <Link
       href={href}

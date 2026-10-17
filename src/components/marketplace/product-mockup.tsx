@@ -34,7 +34,9 @@ export function ProductMockup({ productName, categoryId, variant }: ProductMocku
           {productName} · {screenTitles[variant]}
         </span>
       </div>
-      <div className={`bg-gradient-to-br p-3 ${variant === 'transaksi' ? 'from-slate-50 to-slate-100' : 'from-white to-slate-50'}`}>
+      <div
+        className={`bg-gradient-to-br p-3 ${variant === 'transaksi' ? 'from-slate-50 to-slate-100' : 'from-white to-slate-50'}`}
+      >
         {variant === 'dashboard' && <DashboardBody accent={accent} />}
         {variant === 'transaksi' && <TransaksiBody accent={accent} />}
         {variant === 'laporan' && <LaporanBody accent={accent} />}
@@ -109,7 +111,9 @@ function TransaksiBody({ accent }: { accent: string }) {
             key={item.name}
             className={`rounded-lg border p-2 ${index === 0 ? 'border-slate-300 bg-white shadow-sm' : 'border-slate-100 bg-white/70'}`}
           >
-            <div className={`mb-1 h-8 rounded ${index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50'}`} />
+            <div
+              className={`mb-1 h-8 rounded ${index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50'}`}
+            />
             <p className="truncate text-[10px] font-semibold text-slate-700">{item.name}</p>
             <p className="text-[10px] text-slate-500">{item.price}</p>
           </div>
@@ -128,7 +132,9 @@ function TransaksiBody({ accent }: { accent: string }) {
           <p className="text-[9px] text-slate-500">Total</p>
           <p className="text-xs font-bold text-slate-800">Rp96.000</p>
         </div>
-        <div className={`mt-1 rounded bg-gradient-to-r py-1 text-center text-[9px] font-bold text-white ${accent}`}>
+        <div
+          className={`mt-1 rounded bg-gradient-to-r py-1 text-center text-[9px] font-bold text-white ${accent}`}
+        >
           Bayar
         </div>
       </div>
@@ -157,10 +163,13 @@ function LaporanBody({ accent }: { accent: string }) {
         >
           <div className="min-w-0">
             <p className="truncate text-[10px] font-medium text-slate-700">{row.name}</p>
-            <div className={`h-1 rounded-full bg-gradient-to-r ${accent}`} style={{ width: row.width }} />
+            <div
+              className={`h-1 rounded-full bg-gradient-to-r ${accent}`}
+              style={{ width: row.width }}
+            />
           </div>
-          <span className="text-[10px] tabular-nums text-slate-500">{row.qty}</span>
-          <span className="text-[10px] font-semibold tabular-nums text-slate-700">{row.total}</span>
+          <span className="text-[10px] text-slate-500 tabular-nums">{row.qty}</span>
+          <span className="text-[10px] font-semibold text-slate-700 tabular-nums">{row.total}</span>
         </div>
       ))}
     </div>

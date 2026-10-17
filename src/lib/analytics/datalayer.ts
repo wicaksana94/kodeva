@@ -99,7 +99,10 @@ export function trackAddToCart(line: PricingLine, options: { campaign?: string }
   });
 }
 
-export function trackBeginCheckout(lines: PricingLine[], options: { campaign?: string } = {}): void {
+export function trackBeginCheckout(
+  lines: PricingLine[],
+  options: { campaign?: string } = {},
+): void {
   const value = lines.reduce((total, line) => total + line.lineTotal, 0);
   pushEvent({
     event: 'begin_checkout',

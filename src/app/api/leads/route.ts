@@ -16,15 +16,15 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return Response.json({ ok: false, error: 'Body harus berupa JSON yang valid.' }, { status: 400 });
+    return Response.json(
+      { ok: false, error: 'Body harus berupa JSON yang valid.' },
+      { status: 400 },
+    );
   }
 
   const parsed = leadRequestSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json(
-      { ok: false, errors: fieldErrorsFromZod(parsed.error) },
-      { status: 400 },
-    );
+    return Response.json({ ok: false, errors: fieldErrorsFromZod(parsed.error) }, { status: 400 });
   }
   const lead = parsed.data;
 

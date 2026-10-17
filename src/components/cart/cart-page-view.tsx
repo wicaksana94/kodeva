@@ -22,7 +22,10 @@ export function CartPageView() {
     return (
       <div aria-label="Memuat keranjang…" role="status" className="mt-8 space-y-3">
         {Array.from({ length: 3 }).map((_, index) => (
-          <div key={index} className="h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100" />
+          <div
+            key={index}
+            className="h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100"
+          />
         ))}
       </div>
     );
@@ -86,7 +89,9 @@ export function CartPageView() {
                   }}
                   onRemove={() => {
                     remove(line.productId, line.packageId);
-                    pushToast(`${line.product.name} (${line.package.name}) dihapus dari keranjang.`);
+                    pushToast(
+                      `${line.product.name} (${line.package.name}) dihapus dari keranjang.`,
+                    );
                   }}
                 />
               );

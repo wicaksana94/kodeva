@@ -23,7 +23,12 @@ export const lead = defineType({
     defineField({ name: 'utmContent', title: 'UTM Content', type: 'string', readOnly: true }),
     defineField({ name: 'utmTerm', title: 'UTM Term', type: 'string', readOnly: true }),
     defineField({ name: 'referrer', title: 'Referrer', type: 'string', readOnly: true }),
-    defineField({ name: 'landingPath', title: 'Halaman pendaratan', type: 'string', readOnly: true }),
+    defineField({
+      name: 'landingPath',
+      title: 'Halaman pendaratan',
+      type: 'string',
+      readOnly: true,
+    }),
     defineField({ name: 'createdAt', title: 'Waktu masuk', type: 'datetime', readOnly: true }),
   ],
   orderings: [

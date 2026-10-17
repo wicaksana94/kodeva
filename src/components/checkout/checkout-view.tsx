@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { getCartTotals } from '@/lib/cart/logic';
 import { getStoredAttribution } from '@/lib/analytics/utm';
-import {
-  hasRecentCheckoutStart,
-  markCheckoutStarted,
-} from '@/lib/analytics/checkout-session';
+import { hasRecentCheckoutStart, markCheckoutStarted } from '@/lib/analytics/checkout-session';
 import { trackBeginCheckout } from '@/lib/analytics/datalayer';
-import { PAYMENT_METHOD_LABELS, checkoutRequestSchema, type PaymentMethod } from '@/lib/checkout/schema';
+import {
+  PAYMENT_METHOD_LABELS,
+  checkoutRequestSchema,
+  type PaymentMethod,
+} from '@/lib/checkout/schema';
 import { formatIDR } from '@/lib/money';
 import { DEFAULT_CAMPAIGN } from '@/lib/campaign';
 import { useCartStore } from '@/lib/store/cart';
@@ -155,7 +156,14 @@ export function CheckoutView() {
       <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6 sm:p-8">
         <div className="flex items-start gap-4">
           <span className="grid size-12 shrink-0 place-items-center rounded-full bg-emerald-600 text-white">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="size-6">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              className="size-6"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
           </span>
@@ -389,7 +397,8 @@ export function CheckoutView() {
                       {PAYMENT_METHOD_LABELS[method]}
                     </span>
                     <span className="mt-0.5 block text-xs text-slate-500">
-                      {method === 'transfer' && 'Instruksi Virtual Account dikirim setelah pesanan dibuat.'}
+                      {method === 'transfer' &&
+                        'Instruksi Virtual Account dikirim setelah pesanan dibuat.'}
                       {method === 'card' && 'Simulasi pembayaran kartu 3D Secure.'}
                       {method === 'ewallet' && 'Simulasi deeplink ke aplikasi e-wallet.'}
                     </span>
@@ -405,7 +414,9 @@ export function CheckoutView() {
             disabled={submitting}
             className="min-h-12 w-full rounded-xl bg-indigo-600 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitting ? 'Memproses pembayaran…' : `Bayar Sekarang — ${formatIDR(totals.subtotal)}`}
+            {submitting
+              ? 'Memproses pembayaran…'
+              : `Bayar Sekarang — ${formatIDR(totals.subtotal)}`}
           </button>
           <p aria-live="polite" className="sr-only">
             {submitting ? 'Sedang memproses pembayaran' : ''}
@@ -413,7 +424,7 @@ export function CheckoutView() {
         </form>
       </div>
 
-      <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2 lg:sticky lg:top-20">
+      <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-20 lg:col-span-2">
         <h2 className="text-base font-bold text-slate-900">Pesanan Anda</h2>
         {!hydrated ? (
           <div className="mt-4 space-y-3" role="status" aria-label="Memuat pesanan…">

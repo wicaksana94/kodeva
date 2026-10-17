@@ -1,5 +1,9 @@
 import Image from 'next/image';
-import { PortableText, type PortableTextBlock, type PortableTextComponents } from '@portabletext/react';
+import {
+  PortableText,
+  type PortableTextBlock,
+  type PortableTextComponents,
+} from '@portabletext/react';
 import { sanityImageLoader, sanityImageSrc } from '@/lib/sanity/image';
 import type { SanityImage } from '@/sanity/types';
 

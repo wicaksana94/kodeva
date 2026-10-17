@@ -15,10 +15,10 @@ export default function CatalogError({
         role="alert"
         className="rounded-2xl border border-red-200 bg-red-50 px-6 py-12 text-center"
       >
-        <p className="text-sm font-bold tracking-widest text-red-600 uppercase">Terjadi kesalahan</p>
-        <h1 className="mt-2 text-2xl font-extrabold text-slate-900">
-          Katalog gagal dimuat
-        </h1>
+        <p className="text-sm font-bold tracking-widest text-red-600 uppercase">
+          Terjadi kesalahan
+        </p>
+        <h1 className="mt-2 text-2xl font-extrabold text-slate-900">Katalog gagal dimuat</h1>
         <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
           Silakan coba lagi. Jika Anda mengakses dengan{' '}
           <code className="rounded bg-red-100 px-1">?mock=fail</code>, ini adalah simulasi kegagalan

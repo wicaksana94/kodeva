@@ -55,8 +55,8 @@ export async function SiteFooter() {
         </div>
         <div className="mt-8 border-t border-slate-200 pt-6 text-xs text-slate-500">
           <p>
-            © {year} Kodeva (brand fiktif). Situs demo untuk keperluan technical
-            skill test — seluruh produk, harga, testimoni, dan kontak adalah data dummy.
+            © {year} Kodeva (brand fiktif). Situs demo untuk keperluan technical skill test —
+            seluruh produk, harga, testimoni, dan kontak adalah data dummy.
           </p>
         </div>
       </div>

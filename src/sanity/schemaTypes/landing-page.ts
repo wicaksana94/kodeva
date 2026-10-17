@@ -40,38 +40,58 @@ export const landingPage = defineType({
       group: 'promo',
     }),
 
-    defineField({ name: 'hero', title: 'Hero', type: 'object', group: 'hero', fields: [
-      defineField({ name: 'eyebrow', title: 'Eyebrow (teks kecil di atas judul)', type: 'string' }),
-      defineField({
-        name: 'title',
-        title: 'Judul',
-        type: 'string',
-        validation: (rule) => rule.required().max(90),
-      }),
-      defineField({
-        name: 'subtitle',
-        title: 'Subjudul',
-        type: 'text',
-        rows: 3,
-        validation: (rule) => rule.required().max(220),
-      }),
-      defineField({
-        name: 'image',
-        title: 'Gambar hero',
-        type: 'image',
-        options: { hotspot: true },
-        fields: [
-          defineField({ name: 'alt', title: 'Teks alternatif (aksesibilitas)', type: 'string' }),
-        ],
-      }),
-      defineField({ name: 'ctaPrimaryLabel', title: 'Label tombol utama', type: 'string' }),
-      defineField({ name: 'ctaPrimaryHref', title: 'Link tombol utama', type: 'string' }),
-      defineField({ name: 'ctaSecondaryLabel', title: 'Label tombol sekunder', type: 'string' }),
-      defineField({ name: 'ctaSecondaryHref', title: 'Link tombol sekunder', type: 'string' }),
-    ] }),
+    defineField({
+      name: 'hero',
+      title: 'Hero',
+      type: 'object',
+      group: 'hero',
+      fields: [
+        defineField({
+          name: 'eyebrow',
+          title: 'Eyebrow (teks kecil di atas judul)',
+          type: 'string',
+        }),
+        defineField({
+          name: 'title',
+          title: 'Judul',
+          type: 'string',
+          validation: (rule) => rule.required().max(90),
+        }),
+        defineField({
+          name: 'subtitle',
+          title: 'Subjudul',
+          type: 'text',
+          rows: 3,
+          validation: (rule) => rule.required().max(220),
+        }),
+        defineField({
+          name: 'image',
+          title: 'Gambar hero',
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({ name: 'alt', title: 'Teks alternatif (aksesibilitas)', type: 'string' }),
+          ],
+        }),
+        defineField({ name: 'ctaPrimaryLabel', title: 'Label tombol utama', type: 'string' }),
+        defineField({ name: 'ctaPrimaryHref', title: 'Link tombol utama', type: 'string' }),
+        defineField({ name: 'ctaSecondaryLabel', title: 'Label tombol sekunder', type: 'string' }),
+        defineField({ name: 'ctaSecondaryHref', title: 'Link tombol sekunder', type: 'string' }),
+      ],
+    }),
 
-    defineField({ name: 'featuredHeading', title: 'Judul section produk unggulan', type: 'string', group: 'featured' }),
-    defineField({ name: 'featuredSubheading', title: 'Subjudul section produk unggulan', type: 'string', group: 'featured' }),
+    defineField({
+      name: 'featuredHeading',
+      title: 'Judul section produk unggulan',
+      type: 'string',
+      group: 'featured',
+    }),
+    defineField({
+      name: 'featuredSubheading',
+      title: 'Subjudul section produk unggulan',
+      type: 'string',
+      group: 'featured',
+    }),
     defineField({
       name: 'featuredProducts',
       title: 'Produk yang ditampilkan',
@@ -82,8 +102,18 @@ export const landingPage = defineType({
       description: 'Pilih produk (dari katalog marketplace) yang tampil di landing page.',
     }),
 
-    defineField({ name: 'testimonialsHeading', title: 'Judul section testimoni', type: 'string', group: 'testimonials' }),
-    defineField({ name: 'testimonialsSubheading', title: 'Subjudul section testimoni', type: 'string', group: 'testimonials' }),
+    defineField({
+      name: 'testimonialsHeading',
+      title: 'Judul section testimoni',
+      type: 'string',
+      group: 'testimonials',
+    }),
+    defineField({
+      name: 'testimonialsSubheading',
+      title: 'Subjudul section testimoni',
+      type: 'string',
+      group: 'testimonials',
+    }),
     defineField({
       name: 'testimonials',
       title: 'Testimoni',
@@ -93,9 +123,20 @@ export const landingPage = defineType({
         {
           type: 'object',
           fields: [
-            defineField({ name: 'name', title: 'Nama', type: 'string', validation: (rule) => rule.required() }),
+            defineField({
+              name: 'name',
+              title: 'Nama',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
             defineField({ name: 'role', title: 'Jabatan / usaha', type: 'string' }),
-            defineField({ name: 'quote', title: 'Isi testimoni', type: 'text', rows: 3, validation: (rule) => rule.required() }),
+            defineField({
+              name: 'quote',
+              title: 'Isi testimoni',
+              type: 'text',
+              rows: 3,
+              validation: (rule) => rule.required(),
+            }),
           ],
           preview: { select: { title: 'name', subtitle: 'role' } },
         },
@@ -103,7 +144,12 @@ export const landingPage = defineType({
     }),
 
     defineField({ name: 'faqHeading', title: 'Judul section FAQ', type: 'string', group: 'faq' }),
-    defineField({ name: 'faqSubheading', title: 'Subjudul section FAQ', type: 'string', group: 'faq' }),
+    defineField({
+      name: 'faqSubheading',
+      title: 'Subjudul section FAQ',
+      type: 'string',
+      group: 'faq',
+    }),
     defineField({
       name: 'faqItems',
       title: 'Pertanyaan & jawaban',
@@ -113,8 +159,19 @@ export const landingPage = defineType({
         {
           type: 'object',
           fields: [
-            defineField({ name: 'question', title: 'Pertanyaan', type: 'string', validation: (rule) => rule.required() }),
-            defineField({ name: 'answer', title: 'Jawaban', type: 'text', rows: 4, validation: (rule) => rule.required() }),
+            defineField({
+              name: 'question',
+              title: 'Pertanyaan',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'answer',
+              title: 'Jawaban',
+              type: 'text',
+              rows: 4,
+              validation: (rule) => rule.required(),
+            }),
           ],
           preview: { select: { title: 'question' } },
         },
@@ -122,7 +179,13 @@ export const landingPage = defineType({
     }),
 
     defineField({ name: 'leadHeading', title: 'Judul form lead', type: 'string', group: 'lead' }),
-    defineField({ name: 'leadSubheading', title: 'Subjudul form lead', type: 'text', rows: 2, group: 'lead' }),
+    defineField({
+      name: 'leadSubheading',
+      title: 'Subjudul form lead',
+      type: 'text',
+      rows: 2,
+      group: 'lead',
+    }),
     defineField({
       name: 'leadBullets',
       title: 'Poin keunggulan di samping form',

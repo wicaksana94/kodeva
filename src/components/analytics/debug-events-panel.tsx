@@ -39,13 +39,18 @@ export function DebugEventsPanel() {
       {open && (
         <div className="max-h-72 overflow-y-auto border-t border-slate-700 px-3 py-2 font-mono text-[11px] leading-relaxed">
           {events.length === 0 ? (
-            <p className="py-2 text-slate-500">Belum ada event. Coba klik CTA / tambah ke keranjang.</p>
+            <p className="py-2 text-slate-500">
+              Belum ada event. Coba klik CTA / tambah ke keranjang.
+            </p>
           ) : (
             <ul className="space-y-2">
               {[...events].reverse().map((entry, index) => (
-                <li key={events.length - index} className="border-b border-slate-800 pb-2 last:border-0">
+                <li
+                  key={events.length - index}
+                  className="border-b border-slate-800 pb-2 last:border-0"
+                >
                   <span className="text-emerald-400">{entry.event}</span>
-                  <pre className="mt-0.5 whitespace-pre-wrap break-all text-slate-300">
+                  <pre className="mt-0.5 break-all whitespace-pre-wrap text-slate-300">
                     {JSON.stringify(entry, null, 1)}
                   </pre>
                 </li>

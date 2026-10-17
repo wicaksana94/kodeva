@@ -155,9 +155,7 @@ export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
       )}
 
       <section className="mt-12 rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-600 p-6 text-center sm:p-8">
-        <h2 className="text-xl font-extrabold text-white">
-          Siap rapikan operasional bisnis Anda?
-        </h2>
+        <h2 className="text-xl font-extrabold text-white">Siap rapikan operasional bisnis Anda?</h2>
         <p className="mx-auto mt-2 max-w-md text-sm text-indigo-100">
           Konsultasi gratis dengan tim kami, atau langsung jelajahi {DEFAULT_CAMPAIGN.name}.
         </p>

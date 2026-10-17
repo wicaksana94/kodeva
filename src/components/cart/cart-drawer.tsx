@@ -66,10 +66,7 @@ export function CartDrawer() {
   }
 
   return (
-    <div
-      className={`fixed inset-0 z-60 ${open ? '' : 'pointer-events-none'}`}
-      aria-hidden={!open}
-    >
+    <div className={`fixed inset-0 z-60 ${open ? '' : 'pointer-events-none'}`} aria-hidden={!open}>
       <div
         onClick={closeCart}
         className={`pointer-events-auto absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity duration-200 ${
@@ -184,7 +181,7 @@ export function CartDrawer() {
             )}
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm text-slate-600">Subtotal</span>
-              <span className="text-lg font-bold tabular-nums text-slate-900">
+              <span className="text-lg font-bold text-slate-900 tabular-nums">
                 {formatIDR(totals.subtotal)}
               </span>
             </div>

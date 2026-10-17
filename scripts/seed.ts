@@ -13,11 +13,7 @@
  * createOrReplace, jadi aman dijalankan berulang kali.
  */
 import { getSanityWriteClient } from '../src/sanity/client';
-import {
-  fallbackCategories,
-  fallbackLanding,
-  fallbackPosts,
-} from '../src/sanity/fallback';
+import { fallbackCategories, fallbackLanding, fallbackPosts } from '../src/sanity/fallback';
 import type { PortableTextBlock } from '@portabletext/react';
 
 function slugField(current: string) {

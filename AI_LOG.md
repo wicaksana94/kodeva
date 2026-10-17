@@ -8,11 +8,11 @@
 
 ## 1. Tools yang dipakai dan untuk bagian apa
 
-| Tool | Dipakai untuk |
-| --- | --- |
-| **opencode CLI** (model `opencode/deepseek-v4.1-flash-free`) | Pair-programming utama sepanjang sesi: menganalisis brief, memutuskan arsitektur, menulis hampir seluruh kode, unit test, dokumentasi README/AI_LOG |
-| **firecrawl CLI** (skill `firecrawl-parse` di opencode) | Mengonversi brief PDF `Fullstack_Developer_Skill_Test_DSG.pdf` menjadi markdown (`.firecrawl/skill-test.md`) karena model tidak bisa membaca PDF secara langsung |
-| Terminal via opencode (pnpm, Node.js 24, git) | Scaffold project, install dependency, menjalankan lint/typecheck/test/build, commit |
+| Tool                                                         | Dipakai untuk                                                                                                                                                    |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **opencode CLI** (model `opencode/deepseek-v4.1-flash-free`) | Pair-programming utama sepanjang sesi: menganalisis brief, memutuskan arsitektur, menulis hampir seluruh kode, unit test, dokumentasi README/AI_LOG              |
+| **firecrawl CLI** (skill `firecrawl-parse` di opencode)      | Mengonversi brief PDF `Fullstack_Developer_Skill_Test_DSG.pdf` menjadi markdown (`.firecrawl/skill-test.md`) karena model tidak bisa membaca PDF secara langsung |
+| Terminal via opencode (pnpm, Node.js 24, git)                | Scaffold project, install dependency, menjalankan lint/typecheck/test/build, commit                                                                              |
 
 Catatan: tidak ada kode yang di-generate di luar sesi opencode ini. Seluruh prompt & keputusan
 kunci tercatat di bawah.
@@ -33,20 +33,31 @@ Sesuai instruksi brief ("kalau ada hal yang ambigu, tanyakan atau tulis asumsi")
 1. > "baca [brief PDF] lalu kerjakan sesuai instruksi dan kriteria penilaian. Jika ada yang
    > perlu dikonfirmasi, silahkan chat"
 
-   **Kenapa membantu:** memberi mandat eksekusi penuh *sekaligus* izin eksplisit untuk bertanya
+   **Kenapa membantu:** memberi mandat eksekusi penuh _sekaligus_ izin eksplisit untuk bertanya
    saat ambigu. Hasilnya AI tidak menebak-nebak stack/CMS, melainkan menyusun 3 pertanyaan
    terstruktur (CMS, scope, deploy) via fitur question sebelum menulis satu baris kode pun.
    Ini mencegah pemborosan waktu karena salah asumsi arsitektur.
 
 2. > "Cantumkan log penggunaan ai di opencode pada sesi ini di AI_LOG.md"
 
-   **Kenapa membantu:** permintaan deliverable yang eksplisit menyebut *format* (AI_LOG.md),
-   *sumber* (sesi opencode ini), dan *lokasi*. AI langsung bisa mengeksekusi tanpa tanya balik,
+   **Kenapa membantu:** permintaan deliverable yang eksplisit menyebut _format_ (AI_LOG.md),
+   _sumber_ (sesi opencode ini), dan _lokasi_. AI langsung bisa mengeksekusi tanpa tanya balik,
    dan penilaian "Dokumentasi & AI log" (20 poin) terpenuhi dengan pencatatan yang terjadi
-   *selama* proses, bukan rekonstruksi setelah selesai.
+   _selama_ proses, bukan rekonstruksi setelah selesai.
 
-3. *(akan ditambah jika ada prompt lanjutan yang terbukti produktif — mis. prompt verifikasi
-   Lighthouse/deploy)*
+3. > "pastikan username git adalah Arya Wicaksana, jika belum maka ganti ke Arya Wicaksana"
+
+   **Kenapa membantu:** instruksi verifikasi identitas menjelang deliverable repo. AI langsung
+   mengecek `git config user.name/email` + author seluruh commit yang ada, lalu melaporkan hasil
+   (ternyata sudah benar) alih-alih langsung "memperbaiki" yang tidak perlu. Menunjukkan pola
+   kerja: verifikasi dulu, baru bertindak.
+
+4. > "Continue if you have next steps, or stop and ask for clarification if you are unsure how to proceed."
+
+   **Kenapa membantu:** memberi sinyal eksplisit untuk melanjutkan pekerjaan berurutan tanpa
+   duduk menunggu konfirmasi tiap langkah, sekaligus memberi izin berhenti saat ambigu. AI
+   melanjutkan rantai kerja marketplace → blog → ops → tests → Lighthouse secara mandiri dengan
+   verifikasi build/test di setiap titik.
 
 ## 4. Contoh ketika AI memberi hasil yang salah / kurang tepat / tidak memenuhi requirement
 
@@ -74,21 +85,98 @@ Sesuai instruksi brief ("kalau ada hal yang ambigu, tanyakan atau tulis asumsi")
 - **Verifikasi:** seluruh 235 baris brief terbaca lengkap (instruksi umum, skenario, Bagian A/B/C,
   bonus, tabel kriteria penilaian) dan dicocokkan ulang terhadap aksi yang dikerjakan.
 
-### 4.3 *(slot contoh ke-3 — akan diisi bila ditemukan lagi; mis. bug yang tertangkap unit test)*
+### 4.3 Bundling Sanity Studio gagal di Server Component (ditemukan saat `next build`)
+
+- **Nat:** halaman `/studio` dibuat sebagai Server Component yang meng-import `sanity.config.ts`
+  langsung. Build gagal dengan `Error: Export default doesn't exist in target module … swr/dist/index/react-server.mjs`
+  — paket `sanity` ikut ter-bundle ke graph **Server Component** (kondisi `react-server`),
+  sementara `swr` tidak menyediakan default export di kondisi tersebut.
+- **Analisis:** import trace build menunjukkan rantai
+  `page.tsx (Server Component) → sanity.config.ts → sanity/lib/index.js → swr`.
+- **Perbaikan:** config dipindahkan ke balik client boundary — komponen baru
+  `src/components/studio/studio-shell.tsx` (`'use client'`) meng-import `NextStudio` + config,
+  sementara `page.tsx` tetap Server Component (agar bisa mengekspor `metadata`/`viewport` khusus
+  Studio dari `next-sanity/studio`).
+- **Verifikasi:** `pnpm build` hijau; `/studio` di smoke test produksi mengembalikan 200.
+
+### 4.4 Nilai waktu non-deterministik melanggar aturan Cache Components (ditemukan saat `next build`)
+
+- **Nat:** `SiteFooter` memakai `new Date().getFullYear()` langsung saat prerender. Build gagal:
+  `Next.js encountered the unstable value new Date() while prerendering … blocked by
+blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
+- **Perbaikan:** helper `src/lib/time.ts` ber-`'use cache'` + `cacheLife('days')` sehingga tahun
+  di-prerender, aman, dan tetap ter-refresh otomatis harian — bukan sekadar menambahkan
+  `force-dynamic` yang membuang manfaat statis halaman.
+- **Verifikasi:** build hijau; halaman `/` tetap `○ Static` di output build.
+
+### 4.5 Kesalahan sendiri saat perbaikan aksesibilitas (tertangkap re-audit Lighthouse)
+
+- **Nat:** demi memperbaiki urutan heading, elemen `<h2>` diberi `role="status"`. Re-run
+  Lighthouse justru memunculkan **dua** temuan baru: `aria-allowed-role` (role `status` tidak
+  boleh di heading) dan `heading-order` tetap gagal (karena role yang tidak valid membuat h2
+  tidak lagi dihitung sebagai heading di accessibility tree).
+- **Perbaikan:** hapus `role="status"` dari elemen heading (status announcement memang bukan
+  kebutuhan di situ). Pelajaran: setiap perubahan a11y diverifikasi ulang dengan audit, bukan
+  dianggap selesai setelah kode diubah.
+- **Verifikasi:** katalog naik ke aksesibilitas 100; keempat halaman utama kini
+  96–99 perf & 100 a11y/BP/SEO.
 
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
-- **Logika harga & kuota promo (`src/lib/cart/logic.ts`) + unit test** — akan dilaporkan lengkap
-  di sini setelah bagian keranjang selesai (unit test kuota lintas baris, paket campuran,
-  pelepasan kuota saat qty dikurangi, dsb.).
-- **Tracking GA4/dataLayer + atribusi UTM** — akan dilaporkan setelah bagian tracking selesai
-  (bukti event tidak terkirim ulang saat re-render).
+### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
+
+Fungsi murni (tanpa React) supaya bisa dites langsung dan dipakai bersama oleh UI + server:
+`checkQuantity`, `getMaxQuantityForLine`, `addToCart`, `setLineQuantity`, `removeLine`,
+`getCartTotals`, `getPromoUsages`, `reconcileCartItems`. Edge case yang diuji:
+
+- Kuota promo **di-share lintas paket** untuk produk yang sama (Pro + Business kasir-prima
+  berbagi sisa 87 lisensi), termasuk akumulasi lintas baris.
+- **Pelepasan kuota** saat quantity baris promo dikurangi atau baris dihapus.
+- Paket tanpa harga promo **tidak memakai kuota**; produk tanpa promo sama sekali bebas
+  (tidak terpengaruh kuota).
+- Batas `MAX_LICENSE_PER_LINE = 100`, quantity pecahan/negatif/0 ditolak dengan pesan.
+- **Rekonsiliasi data usang dari localStorage**: membuang produk/paket tak dikenal, merge
+  baris duplikat, memotong qty melebihi kuota secara FCFS (baris lebih awal menang), dan
+  menandai `changed` supaya UI memberi notifikasi ke pengguna.
+
+### 5.2 Tracking GA4/dataLayer + atribusi UTM
+
+- Event `view_item`/`add_to_cart`/`begin_checkout` dalam format GA4 ecommerce (`items[]`,
+  `currency: 'IDR'`) + `cta_click` custom dengan konteks (id/lokasi/tujuan/campaign).
+- **Anti-dobel**: registry `shouldFireOnce(key, windowMs)` untuk view_item per produk, dan
+  penanda `sessionStorage` 30 menit untuk begin_checkout (teruji di unit test dengan waktu
+  yang di-inject, tanpa `sleep`).
+- UTM last-touch: parsing, TTL 30 hari, tahan JSON rusak, disertakan di payload lead & order.
+- Alat bukti untuk reviewer: panel `?debug=events` (murni membaca `dataLayer` yang sama).
+
+### 5.3 Validasi & failure path (bagian "Validasi/error/testing" pada nilai)
+
+- Checkout: harga **tidak pernah** dipercaya dari client — dihitung ulang di
+  `/api/mock-payment`; kuota promo divalidasi ulang dan pelanggar dijawab `409` + pesan jelas.
+- Lead: honeypot + minimum waktu pengisian (1,2 detik) + rate limit 5/10 menit per IP; error per
+  field dari Zod ditampilkan inline di form (satu sumber schema untuk client & server).
+- Katalog: `?mock=empty|slow|fail` + `error.tsx` dengan tombol reset; 404 kustom di dua level
+  (root & `(site)`).
+- Semua di atas diverifikasi juga lewat smoke test produksi via `curl` (status code + isi).
+
+### 5.4 Performa & aksesibilitas (Lighthouse, mobile)
+
+- Skor akhir 4 halaman utama: perf **96–99**, a11y/BP/SEO **100** (laporan JSON+HTML+screenshot
+  di `docs/lighthouse/`).
+- Perbaikan yang didorong audit: kontras teks kecil (slate-400 → slate-500/600 pada badge dan
+  price coret), `role="img"` untuk deretan bintang rating, `aria-hidden` untuk logo mark,
+  menghapus `aria-label` yang menduplikasi teks logo, dan memperbaiki heading order katalog.
+- Catatan jujur: proses ini iteratif — dua di antaranya justru memperkenalkan kesalahan baru
+  yang tertangkap re-audit (lihat §4.5).
 
 ## 6. Bagian yang sengaja dikerjakan tanpa AI
 
-*(Diisi oleh user di akhir pengerjaan — berisi bagian mana yang sengaja ditulis/diputuskan
-tanpa bantuan AI beserta alasannya, mis. review akhir terhadap kode yang di-generate AI atau
-penulisan konten copy landing page.)*
+_(Diisi oleh user di akhir pengerjaan — berisi bagian mana yang sengaja ditulis/diputuskan
+tanpa bantuan AI beserta alasannya. Bahan yang bisa dipakai: (a) review akhir manual terhadap
+kode yang di-generate AI (baca ulang logika kuota & alur checkout); (b) verifikasi manual di
+browser — mis. menambah produk promo dari dua paket, cek angka kuota, dan memastikan event di
+`?debug=events` sesuai harapan; (c) keputusan bisnis yang Anda ambil sendiri (scope, prioritas,
+copy/konten); (d) pengecekan hasil deploy.)_
 
 ---
 
@@ -96,8 +184,21 @@ penulisan konten copy landing page.)*
 
 1. Brief PDF dikonversi ke markdown, requirement & kriteria penilaian dianalisis AI.
 2. User memutuskan CMS (Sanity), scope (wajib saja), dan alur deploy (via CLI).
-3. Scaffold `kodeva`: Next.js 16 (App Router) + TypeScript + Tailwind 4; dependency: `sanity`,
-   `next-sanity`, `zustand`, `zod`; tooling: `vitest`, `prettier`, `tsx`.
+3. Scaffold `kodeva`: Next.js 16 (App Router, Cache Components) + TypeScript + Tailwind 4;
+   dependency: `sanity`, `next-sanity`, `zustand`, `zod`; tooling: `vitest`, `prettier`, `tsx`.
 4. `pnpm-workspace.yaml` diperbaiki (`allowBuilds`) — lihat §4.1.
-5. Lapisan domain katalog (`src/lib/catalog/types.ts`) mulai disusun.
-6. AI_LOG.md ini dibuat dan di-commit agar tercatat sebagai bagian dari deliverable.
+5. Lapisan domain katalog + logika keranjang/kuota + 22 unit test (commit `1c6b81b`).
+6. Attribution capture, dataLayer GA4, store zustand (cart persist + reconcile, ui, toasts),
+   drawer keranjang, header/footer, panel debug — di-commit menyusul bersama landing.
+7. Landing page CMS-driven + form lead + API leads (validasi/honeypot/rate-limit) + JSON-LD +
+   studio ter-embed (commit `0916ca6`). Dua kegagalan build nyata diperbaiki di sini (§4.3, §4.4).
+8. Marketplace lengkap: katalog (filter + mock states + error boundary), detail produk
+   (galeri mockup, panel paket + kuota, view_item), keranjang, checkout + `/api/mock-payment`
+   dengan kalkulasi ulang di server (commit `0ebad22`).
+9. Blog list/detail (Portable Text, pagination dengan validasi parameter), sitemap, robots,
+   OG image brand (commit `51c520b`).
+10. Webhook revalidasi, seed script idempotent, 31 unit test tambahan (total 53) (commit `4fdf030`).
+11. Iterasi Lighthouse → perbaikan kontras/ARIA, laporan & screenshot di `docs/lighthouse/`
+    (commit `aca4ddb`), lint/typecheck/test/build bersih.
+12. README final + pembaruan AI_LOG (dokumen ini). Berikutnya: deploy Vercel + Sanity (bersama
+    user), mengisi link deploy, lalu user mengisi §6.

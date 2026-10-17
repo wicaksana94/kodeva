@@ -48,7 +48,12 @@ export const leadRequestSchema = z
     /** Honeypot: harus kosong; diisi artinya bot. */
     honeypot: z.string().max(200).optional(),
     /** Lama waktu pengisian form (ms) — submit terlalu cepat dianggap bot. */
-    elapsedMs: z.number().int().nonnegative().max(24 * 60 * 60 * 1000).optional(),
+    elapsedMs: z
+      .number()
+      .int()
+      .nonnegative()
+      .max(24 * 60 * 60 * 1000)
+      .optional(),
     utm: attributionSchema,
   })
   .superRefine((data, ctx) => {

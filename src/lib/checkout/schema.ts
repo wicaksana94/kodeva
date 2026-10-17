@@ -1,9 +1,5 @@
 import { z } from 'zod';
-import {
-  attributionSchema,
-  isValidEmail,
-  normalizeWhatsAppNumber,
-} from '@/lib/leads/schema';
+import { attributionSchema, isValidEmail, normalizeWhatsAppNumber } from '@/lib/leads/schema';
 
 export const PAYMENT_METHOD_LABELS = {
   transfer: 'Transfer Bank (Virtual Account)',

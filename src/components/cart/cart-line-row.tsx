@@ -68,7 +68,7 @@ export function CartLineRow({ line, quotaNote, onQuantityChange, onRemove }: Car
             {discounted && (
               <p className="text-xs text-slate-500 line-through">{formatIDR(line.lineListTotal)}</p>
             )}
-            <p className="text-sm font-semibold tabular-nums text-slate-900">
+            <p className="text-sm font-semibold text-slate-900 tabular-nums">
               {formatIDR(line.lineTotal)}
             </p>
           </div>

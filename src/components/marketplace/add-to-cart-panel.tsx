@@ -22,8 +22,7 @@ interface AddToCartPanelProps {
 }
 
 export function AddToCartPanel({ product, campaign }: AddToCartPanelProps) {
-  const defaultPackage =
-    product.packages.find((pkg) => pkg.popular) ?? product.packages[0];
+  const defaultPackage = product.packages.find((pkg) => pkg.popular) ?? product.packages[0];
   const [selectedPackageId, setSelectedPackageId] = useState<PackageId>(defaultPackage.id);
   const [quantity, setQuantity] = useState(1);
 
