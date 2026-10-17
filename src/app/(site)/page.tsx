@@ -106,12 +106,8 @@ export default async function LandingPage() {
               )}
             </div>
             <dl className="mt-8 grid max-w-md grid-cols-3 gap-4">
-              {[
-                { value: '15.000+', label: 'bisnis memakai' },
-                { value: '4,8/5', label: 'rating pengguna' },
-                { value: '99,9%', label: 'uptime layanan' },
-              ].map((stat) => (
-                <div key={stat.label}>
+              {content.hero.stats.map((stat) => (
+                <div key={stat._key ?? stat.label}>
                   <dt className="text-xs text-slate-500">{stat.label}</dt>
                   <dd className="text-lg font-extrabold text-slate-900">{stat.value}</dd>
                 </div>
@@ -172,7 +168,7 @@ export default async function LandingPage() {
         <div className="mt-8 text-center">
           <TrackedCta
             href="/katalog"
-            label="Lihat semua produk"
+            label={content.featuredCtaLabel}
             ctaId="featured-see-all"
             location="featured-products"
             campaign={campaignName}
@@ -193,42 +189,56 @@ export default async function LandingPage() {
             )}
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {content.testimonials.map((testimonial, index) => (
-              <figure
-                key={testimonial._key ?? `${testimonial.name}-${index}`}
-                className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5"
-              >
-                <div
-                  className="flex gap-0.5 text-amber-400"
-                  role="img"
-                  aria-label="Rating 5 dari 5"
+            {content.testimonials.map((testimonial, index) => {
+              const photoSrc = sanityImageSrc(testimonial.photo);
+              return (
+                <figure
+                  key={testimonial._key ?? `${testimonial.name}-${index}`}
+                  className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5"
                 >
-                  {Array.from({ length: 5 }).map((_, starIndex) => (
-                    <svg
-                      key={starIndex}
-                      aria-hidden="true"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="size-4"
-                    >
-                      <path d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" />
-                    </svg>
-                  ))}
-                </div>
-                <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-slate-700">
-                  “{testimonial.quote}”
-                </blockquote>
-                <figcaption className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4">
-                  <span className="grid size-10 place-items-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
-                    {productInitials(testimonial.name)}
-                  </span>
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">{testimonial.name}</p>
-                    <p className="text-xs text-slate-500">{testimonial.role}</p>
+                  <div
+                    className="flex gap-0.5 text-amber-400"
+                    role="img"
+                    aria-label="Rating 5 dari 5"
+                  >
+                    {Array.from({ length: 5 }).map((_, starIndex) => (
+                      <svg
+                        key={starIndex}
+                        aria-hidden="true"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        className="size-4"
+                      >
+                        <path d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" />
+                      </svg>
+                    ))}
                   </div>
-                </figcaption>
-              </figure>
-            ))}
+                  <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-slate-700">
+                    “{testimonial.quote}”
+                  </blockquote>
+                  <figcaption className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4">
+                    {photoSrc ? (
+                      <Image
+                        src={photoSrc}
+                        loader={sanityImageLoader}
+                        alt={testimonial.photo?.alt || testimonial.name}
+                        width={40}
+                        height={40}
+                        className="size-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="grid size-10 place-items-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
+                        {productInitials(testimonial.name)}
+                      </span>
+                    )}
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">{testimonial.name}</p>
+                      <p className="text-xs text-slate-500">{testimonial.role}</p>
+                    </div>
+                  </figcaption>
+                </figure>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -155,7 +155,8 @@ bagian dinamisnya.
 
 ### 4.2 Konten CMS, data domain di kode
 
-Copy marketing sepenuhnya di CMS; namun **produk, harga, dan kuota promo** sengaja hidup di
+Copy marketing sepenuhnya di CMS (termasuk statistik hero, foto testimoni, dan label CTA di
+landing); namun **produk, harga, dan kuota promo** sengaja hidup di
 `src/lib/catalog/data.ts` (typed). Alasannya: integritas data transaksi tidak cocok
 diedit-bebas dari CMS tanpa validasi bisnis; schema Sanity untuk landing/artikel memakai
 `options.list` yang di-generate dari file yang sama sehingga marketing tetap memilih dari daftar
@@ -367,8 +368,9 @@ docs/lighthouse/       # bukti audit (JSON/HTML/PNG)
 ## 9. Untuk tim marketing (cara pakai CMS)
 
 1. Buka `/studio` (login sekali dengan akun Sanity yang diundang).
-2. **Landing Page** (singleton): edit hero, produk unggulan (pilih dari daftar produk valid),
-   testimoni, FAQ, dan copy form lead — semua berlabel Bahasa Indonesia, dikelompokkan per
+2. **Landing Page** (singleton): edit hero (judul, gambar, statistik singkat), produk unggulan
+   (pilih dari daftar produk valid + label tombol), testimoni (teks + foto opsional — kosong =
+   inisial nama), FAQ, dan copy form lead — semua berlabel Bahasa Indonesia, dikelompokkan per
    seksi. Klik **Publish** → webhook memicu revalidasi → perubahan tampil dalam hitungan detik.
 3. **Artikel Blog**: buat draft → isi judul/ringkasan/kategori/body (mendukung heading, kutipan,
    list, tautan, gambar) → pilih produk terkait → **Publish**.

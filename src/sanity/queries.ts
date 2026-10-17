@@ -5,6 +5,7 @@ export const landingPageQuery = /* groq */ `
   featuredHeading,
   featuredSubheading,
   "featuredProductIds": featuredProducts,
+  featuredCtaLabel,
   testimonialsHeading,
   testimonialsSubheading,
   testimonials,

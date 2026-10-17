@@ -25,13 +25,19 @@ const CONTENT_CACHE_LIFE = { stale: 300, revalidate: 600, expire: 86400 } as con
 function normalizeLanding(doc: Partial<LandingContent>): LandingContent {
   return {
     campaignName: doc.campaignName ?? fallbackLanding.campaignName,
-    hero: { ...fallbackLanding.hero, ...(doc.hero ?? {}) },
+    hero: {
+      ...fallbackLanding.hero,
+      ...(doc.hero ?? {}),
+      stats:
+        doc.hero?.stats && doc.hero.stats.length > 0 ? doc.hero.stats : fallbackLanding.hero.stats,
+    },
     featuredHeading: doc.featuredHeading ?? fallbackLanding.featuredHeading,
     featuredSubheading: doc.featuredSubheading ?? fallbackLanding.featuredSubheading,
     featuredProductIds:
       doc.featuredProductIds && doc.featuredProductIds.length > 0
         ? doc.featuredProductIds
         : fallbackLanding.featuredProductIds,
+    featuredCtaLabel: doc.featuredCtaLabel || fallbackLanding.featuredCtaLabel,
     testimonialsHeading: doc.testimonialsHeading ?? fallbackLanding.testimonialsHeading,
     testimonialsSubheading: doc.testimonialsSubheading ?? fallbackLanding.testimonialsSubheading,
     testimonials:

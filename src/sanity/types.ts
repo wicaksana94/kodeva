@@ -6,12 +6,19 @@ export interface SanityImage {
   alt?: string;
 }
 
+export interface HeroStat {
+  _key?: string;
+  value: string;
+  label: string;
+}
+
 export interface HeroContent {
   eyebrow?: string | null;
   title: string;
   subtitle: string;
   image: SanityImage | null;
   imageAlt: string;
+  stats: HeroStat[];
   ctaPrimaryLabel: string;
   ctaPrimaryHref: string;
   ctaSecondaryLabel?: string | null;
@@ -23,6 +30,7 @@ export interface TestimonialItem {
   name: string;
   role: string;
   quote: string;
+  photo?: SanityImage | null;
 }
 
 export interface FaqItem {
@@ -37,6 +45,7 @@ export interface LandingContent {
   featuredHeading: string;
   featuredSubheading?: string | null;
   featuredProductIds: string[];
+  featuredCtaLabel: string;
   testimonialsHeading: string;
   testimonialsSubheading?: string | null;
   testimonials: TestimonialItem[];

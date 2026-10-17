@@ -173,6 +173,20 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
   backdrop menutup kembali (`none`, `0`, `inert`), lalu halaman tetap interaktif.
   lint/typecheck/53 unit test tetap hijau.
 
+### 4.9 Dua bagian konten landing belum CMS-editable (temuan audit requirement)
+
+- **Nat:** audit ulang requirement brief — "konten setiap section (teks, gambar, item seperti
+  produk/testimoni/FAQ) bisa diedit lewat CMS oleh user non-teknis": hampir seluruh section
+  sudah CMS-driven, tetapi statistik hero (15.000+, 4,8/5, 99,9%) dan label tombol "Lihat
+  semua produk" masih hardcoded di `page.tsx`; testimoni juga belum bisa menampilkan foto.
+- **Perbaikan:** tambah `hero.stats[]`, `featuredCtaLabel`, dan foto testimoni (opsional —
+  fallback inisial nama) di schema Sanity `landingPage` dengan label Bahasa Indonesia; alur
+  query, normalisasi konten, fallback, dan seed ikut diperbarui agar satu sumber kebenaran.
+- **Verifikasi:** marker test terhadap CMS live — nilai spesifik `[[CMS-STAT]]` & `[[CMS-CTA]]`
+  ditulis ke dokumen via API lalu **tampil di HTML halaman** (render dari Sanity, bukan
+  fallback: log server tanpa error fetch), kemudian dipulihkan ke nilai normal dan state
+  dokumen dicek via query API. lint/typecheck/53 test hijau.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -271,5 +285,8 @@ copy/konten); (d) pengecekan hasil deploy.)_
 18. Laporan lanjutan user: kartu artikel tetap tidak bisa diklik → investigasi browser headless
     (Chrome + CDP) menemukan backdrop drawer tertutup memblokir seluruh klik halaman (plus class
     `z-60` tidak valid); diperbaiki dan diverifikasi dengan klik mouse sungguhan (§4.8).
-19. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+19. Audit kepatuhan requirement CMS ("konten tiap section bisa diedit non-teknis"): statistik
+    hero, label tombol produk unggulan, dan foto testimoni ditambahkan ke schema Sanity —
+    sebelumnya dua yang pertama hardcoded di `page.tsx`; diverifikasi marker test (§4.9).
+20. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.

@@ -65,6 +65,33 @@ export const landingPage = defineType({
           validation: (rule) => rule.required().max(220),
         }),
         defineField({
+          name: 'stats',
+          title: 'Statistik singkat (di bawah tombol)',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'value',
+                  title: 'Angka / nilai',
+                  type: 'string',
+                  validation: (rule) => rule.required(),
+                }),
+                defineField({
+                  name: 'label',
+                  title: 'Keterangan',
+                  type: 'string',
+                  validation: (rule) => rule.required(),
+                }),
+              ],
+              preview: { select: { title: 'value', subtitle: 'label' } },
+            },
+          ],
+          validation: (rule) => rule.max(4),
+          description: 'Contoh: "15.000+" / "bisnis memakai". Kosongkan untuk memakai default.',
+        }),
+        defineField({
           name: 'image',
           title: 'Gambar hero',
           type: 'image',
@@ -101,6 +128,13 @@ export const landingPage = defineType({
       options: { list: productOptions },
       description: 'Pilih produk (dari katalog marketplace) yang tampil di landing page.',
     }),
+    defineField({
+      name: 'featuredCtaLabel',
+      title: 'Label tombol "lihat semua"',
+      type: 'string',
+      group: 'featured',
+      description: 'Tombol di bawah daftar produk. Kosong = "Lihat semua produk".',
+    }),
 
     defineField({
       name: 'testimonialsHeading',
@@ -136,6 +170,20 @@ export const landingPage = defineType({
               type: 'text',
               rows: 3,
               validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'photo',
+              title: 'Foto (opsional)',
+              description: 'Bila kosong, tampil inisial nama.',
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Teks alternatif (aksesibilitas)',
+                  type: 'string',
+                }),
+              ],
             }),
           ],
           preview: { select: { title: 'name', subtitle: 'role' } },

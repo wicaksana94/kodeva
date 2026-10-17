@@ -54,6 +54,11 @@ export const fallbackLanding: LandingContent = {
       'Aplikasi kasir, HR & payroll, dan add-on pendukung dalam satu ekosistem lisensi. Diskon hingga 25% sepanjang Promo Akhir Tahun.',
     image: null,
     imageAlt: 'Tangkapan layar aplikasi Kodeva',
+    stats: [
+      { value: '15.000+', label: 'bisnis memakai' },
+      { value: '4,8/5', label: 'rating pengguna' },
+      { value: '99,9%', label: 'uptime layanan' },
+    ],
     ctaPrimaryLabel: 'Belanja Promo Sekarang',
     ctaPrimaryHref: '/katalog',
     ctaSecondaryLabel: 'Konsultasi Gratis',
@@ -63,6 +68,7 @@ export const fallbackLanding: LandingContent = {
   featuredSubheading:
     'Paling banyak dipakai UMKM Indonesia — dari warung hingga jaringan resto dan tim HR.',
   featuredProductIds: DEFAULT_FEATURED_PRODUCT_IDS,
+  featuredCtaLabel: 'Lihat semua produk',
   testimonialsHeading: 'Dipercaya ribuan pemilik usaha',
   testimonialsSubheading: 'Cerita nyata dari pengguna produk Kodeva.',
   testimonials: [
