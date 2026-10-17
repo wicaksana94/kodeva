@@ -1,8 +1,7 @@
-# Kodeva — Technical Skill Test Fullstack Developer (PT Digital Solusi Grup)
+# Kodeva
 
 Situs demo untuk brand fiktif **Kodeva**: landing page campaign, blog ber-CMS, dan mini
-marketplace lisensi software (kasir, HR & payroll, add-on) — dibangun sesuai brief
-_Technical Skill Test Fullstack Developer DSG_.
+marketplace lisensi software (kasir, HR & payroll, add-on).
 
 - **Live demo:** `https://kodeva-dev.vercel.app`
 - **Repositori:** `https://github.com/wicaksana94/kodeva`
