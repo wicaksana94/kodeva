@@ -44,7 +44,7 @@ export function CartLineRow({ line, quotaNote, onQuantityChange, onRemove }: Car
           <button
             type="button"
             onClick={onRemove}
-            className="-m-1 rounded p-1 text-slate-400 transition hover:text-red-600"
+            className="-m-1 rounded p-1 text-slate-500 transition hover:text-red-600"
             aria-label={`Hapus ${line.product.name} paket ${line.package.name} dari keranjang`}
           >
             <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className="size-4">
@@ -66,7 +66,7 @@ export function CartLineRow({ line, quotaNote, onQuantityChange, onRemove }: Car
           />
           <div className="text-right">
             {discounted && (
-              <p className="text-xs text-slate-400 line-through">{formatIDR(line.lineListTotal)}</p>
+              <p className="text-xs text-slate-500 line-through">{formatIDR(line.lineListTotal)}</p>
             )}
             <p className="text-sm font-semibold tabular-nums text-slate-900">
               {formatIDR(line.lineTotal)}

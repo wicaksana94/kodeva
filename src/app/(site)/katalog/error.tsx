@@ -39,7 +39,7 @@ export default function CatalogError({
             Muat ulang katalog
           </Link>
         </div>
-        {error.digest && <p className="mt-4 text-[11px] text-slate-400">Ref: {error.digest}</p>}
+        {error.digest && <p className="mt-4 text-[11px] text-slate-500">Ref: {error.digest}</p>}
       </div>
     </div>
   );

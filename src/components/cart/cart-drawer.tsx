@@ -129,7 +129,7 @@ export function CartDrawer() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
-                  className="size-8 text-slate-400"
+                  className="size-8 text-slate-500"
                 >
                   <path
                     strokeLinecap="round"
@@ -202,7 +202,7 @@ export function CartDrawer() {
             >
               Lihat keranjang lengkap
             </Link>
-            <p className="mt-2 text-center text-xs text-slate-400">
+            <p className="mt-2 text-center text-xs text-slate-500">
               Harga per lisensi/bulan. Belum termasuk PPN.
             </p>
           </div>

@@ -87,8 +87,15 @@ function paginateFallback(page: number): PostsPage {
 }
 
 function toSummary(post: PostDetail): PostSummary {
-  const { body: _body, relatedProductIds: _related, ...summary } = post;
-  return summary;
+  return {
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    excerpt: post.excerpt,
+    cover: post.cover,
+    category: post.category,
+    publishedAt: post.publishedAt,
+  };
 }
 
 export async function getPostsPage(page: number): Promise<PostsPage> {

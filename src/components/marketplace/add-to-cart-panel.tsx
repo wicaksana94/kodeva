@@ -35,15 +35,6 @@ export function AddToCartPanel({ product, campaign }: AddToCartPanelProps) {
   const selectedPackage = product.packages.find((pkg) => pkg.id === selectedPackageId)!;
   const unitPrice = getUnitPrice(selectedPackage);
   const usesPromo = selectedPackage.promoPricePerLicensePerMonth !== null;
-  const discountPercent =
-    usesPromo && selectedPackage.promoPricePerLicensePerMonth !== null
-      ? Math.round(
-          (1 -
-            selectedPackage.promoPricePerLicensePerMonth /
-              selectedPackage.pricePerLicensePerMonth) *
-            100,
-        )
-      : 0;
 
   const lineInCart = items.find(
     (item) => item.productId === product.id && item.packageId === selectedPackageId,
@@ -142,20 +133,20 @@ export function AddToCartPanel({ product, campaign }: AddToCartPanelProps) {
                         </span>
                       )}
                     </span>
-                    <span className="mt-1 block text-xs text-slate-500">
+                    <span className="mt-1 block text-xs text-slate-600">
                       {pkg.featureSummary.slice(0, 3).join(' · ')}
                     </span>
                   </span>
                   <span className="text-right">
                     {pkgUsesPromo && (
-                      <span className="block text-[11px] text-slate-400 line-through">
+                      <span className="block text-[11px] text-slate-600 line-through">
                         {formatIDR(pkg.pricePerLicensePerMonth)}
                       </span>
                     )}
                     <span className="block text-sm font-extrabold text-slate-900">
                       {formatIDR(pkgPrice)}
                     </span>
-                    <span className="block text-[11px] text-slate-500">/{licenseUnit}/bln</span>
+                    <span className="block text-[11px] text-slate-600">/{licenseUnit}/bln</span>
                   </span>
                 </span>
               </label>
@@ -195,7 +186,7 @@ export function AddToCartPanel({ product, campaign }: AddToCartPanelProps) {
           <span className="text-sm text-slate-600">Subtotal</span>
           <span className="text-right">
             {usesPromo && (
-              <span className="mr-2 text-xs text-slate-400 line-through">
+              <span className="mr-2 text-xs text-slate-500 line-through">
                 {formatIDR(listSubtotal)}
               </span>
             )}

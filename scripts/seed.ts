@@ -24,8 +24,12 @@ function slugField(current: string) {
   return { _type: 'slug' as const, current };
 }
 
-function stripKeys<T extends { _key?: string }>(items: T[]): T[] {
-  return items.map(({ _key: _ignored, ...rest }) => rest as T);
+function stripKeys<T extends { _key?: string }>(items: T[]): Omit<T, '_key'>[] {
+  return items.map((item) => {
+    const clone = { ...item };
+    delete clone._key;
+    return clone;
+  });
 }
 
 async function main() {

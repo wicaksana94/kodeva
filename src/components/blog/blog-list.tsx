@@ -79,7 +79,7 @@ export async function BlogList({ searchParams }: { searchParams: SearchParams })
         </nav>
       )}
       {data.totalPages === 1 && (
-        <p className="mt-8 text-center text-sm text-slate-400" role="status">
+        <p className="mt-8 text-center text-sm text-slate-500" role="status">
           {data.total} artikel · {POSTS_PAGE_SIZE} per halaman
         </p>
       )}

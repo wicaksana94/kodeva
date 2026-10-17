@@ -111,7 +111,7 @@ export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
           <time dateTime={post.publishedAt ?? undefined} className="text-slate-500">
             {formatPostDate(post.publishedAt)}
           </time>
-          <span className="text-slate-400">·</span>
+          <span className="text-slate-500">·</span>
           <span className="text-slate-500">{readingMinutes} menit baca</span>
         </div>
         <h1 className="mt-3 text-3xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl">

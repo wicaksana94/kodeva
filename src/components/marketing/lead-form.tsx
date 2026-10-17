@@ -133,7 +133,7 @@ export function LeadForm({ source = 'landing-lead-form' }: LeadFormProps) {
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? 'lead-name-error' : undefined}
             placeholder="Contoh: Budi Santoso"
-            className="mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
+            className="mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
           />
           {errors.name && (
             <p id="lead-name-error" className="mt-1 text-xs font-medium text-red-600">
@@ -192,7 +192,7 @@ export function LeadForm({ source = 'landing-lead-form' }: LeadFormProps) {
             aria-invalid={Boolean(errors.contactValue)}
             aria-describedby={errors.contactValue ? 'lead-contact-error' : undefined}
             placeholder={contactType === 'email' ? 'nama@bisnis.com' : '081234567890'}
-            className="mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
+            className="mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
           />
           {errors.contactValue && (
             <p id="lead-contact-error" className="mt-1 text-xs font-medium text-red-600">

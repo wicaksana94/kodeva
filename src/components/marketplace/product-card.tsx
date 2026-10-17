@@ -32,7 +32,7 @@ export function ProductCard({ product }: ProductCardProps) {
           />
         </div>
         {discounted && (
-          <span className="absolute top-2 right-2 rounded-full bg-amber-500 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+          <span className="absolute top-2 right-2 rounded-full bg-amber-500 px-2.5 py-1 text-[11px] font-bold text-amber-950 shadow-sm">
             Promo
           </span>
         )}
@@ -45,8 +45,8 @@ export function ProductCard({ product }: ProductCardProps) {
           >
             {category?.name ?? product.categoryId}
           </span>
-          <span className="text-[11px] text-slate-400">★ {product.rating.toFixed(1)}</span>
-          <span className="hidden text-[11px] text-slate-400 sm:inline">· {product.customers}</span>
+          <span className="text-[11px] text-slate-500">★ {product.rating.toFixed(1)}</span>
+          <span className="hidden text-[11px] text-slate-500 sm:inline">· {product.customers}</span>
         </div>
 
         <h3 className="mt-2 text-base font-bold text-slate-900 group-hover:text-indigo-700">
@@ -58,7 +58,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-xs text-slate-500">Mulai dari</p>
           <div className="flex items-baseline gap-2">
             {discounted && (
-              <span className="text-xs text-slate-400 line-through">{formatIDR(lowestList)}</span>
+              <span className="text-xs text-slate-500 line-through">{formatIDR(lowestList)}</span>
             )}
             <span className="text-lg font-extrabold text-slate-900">{formatIDR(lowestPrice)}</span>
             <span className="text-xs text-slate-500">/{licenseUnit}/bln</span>

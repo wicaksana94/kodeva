@@ -77,10 +77,10 @@ export async function CatalogResults({ searchParams }: { searchParams: SearchPar
         </div>
       ) : (
         <>
-          <p className="mt-4 text-sm text-slate-500" role="status">
+          <h2 className="mt-4 text-sm font-normal text-slate-500">
             Menampilkan {shownProducts.length} produk
             {activeCategory ? ` di kategori ${activeCategory}` : ' di semua kategori'}.
-          </p>
+          </h2>
           <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {shownProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

@@ -1,23 +1,25 @@
 'use client';
 
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { subscribeToEvents } from '@/lib/analytics/datalayer';
 import type { DataLayerEvent } from '@/lib/analytics/datalayer';
 
 const MAX_VISIBLE_EVENTS = 8;
+
+const emptyQuerySubscribe = () => () => {};
 
 /**
  * Panel debug kecil untuk membuktikan event GA4 memang terkirim ke dataLayer.
  * Aktif hanya jika URL memiliki query `?debug=events`.
  */
 export function DebugEventsPanel() {
-  const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(true);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setEnabled(params.get('debug') === 'events');
-  }, []);
+  const enabled = useSyncExternalStore(
+    emptyQuerySubscribe,
+    () => new URLSearchParams(window.location.search).get('debug') === 'events',
+    () => false,
+  );
 
   const events = useSyncExternalStore(subscribeStore, getEventsSnapshot, () => EMPTY_SNAPSHOT);
 
@@ -37,7 +39,7 @@ export function DebugEventsPanel() {
       {open && (
         <div className="max-h-72 overflow-y-auto border-t border-slate-700 px-3 py-2 font-mono text-[11px] leading-relaxed">
           {events.length === 0 ? (
-            <p className="py-2 text-slate-400">Belum ada event. Coba klik CTA / tambah ke keranjang.</p>
+            <p className="py-2 text-slate-500">Belum ada event. Coba klik CTA / tambah ke keranjang.</p>
           ) : (
             <ul className="space-y-2">
               {[...events].reverse().map((entry, index) => (

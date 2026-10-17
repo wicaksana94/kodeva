@@ -19,8 +19,11 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
-        <Link href="/" className="flex items-center gap-2" aria-label="Kodeva — beranda">
-          <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-lg font-black text-white">
+        <Link href="/" className="flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-lg font-black text-white"
+          >
             K
           </span>
           <span className="text-lg font-extrabold tracking-tight text-slate-900">Kodeva</span>
@@ -47,7 +50,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={openCart}
-          className="relative inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+          className="relative inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-500 hover:bg-slate-50"
           aria-label={
             hydrated && cartCount > 0
               ? `Buka keranjang, ${cartCount} lisensi di dalamnya`

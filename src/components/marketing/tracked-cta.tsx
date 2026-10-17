@@ -10,7 +10,7 @@ const variantStyles: Record<Variant, string> = {
   primary:
     'bg-indigo-600 text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-indigo-600',
   secondary:
-    'border border-slate-300 bg-white text-slate-800 transition hover:border-slate-400 hover:bg-slate-50',
+    'border border-slate-300 bg-white text-slate-800 transition hover:border-slate-500 hover:bg-slate-50',
   ghost: 'text-indigo-700 underline-offset-4 transition hover:underline',
 };
 

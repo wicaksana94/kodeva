@@ -62,7 +62,7 @@ function DashboardBody({ accent }: { accent: string }) {
             { label: 'Rata-rata', value: 'Rp67 rb' },
           ].map((kpi) => (
             <div key={kpi.label} className="rounded-lg border border-slate-100 bg-white p-2">
-              <p className="truncate text-[9px] text-slate-400">{kpi.label}</p>
+              <p className="truncate text-[9px] text-slate-500">{kpi.label}</p>
               <p className="text-xs font-bold text-slate-800">{kpi.value}</p>
             </div>
           ))}
@@ -111,12 +111,12 @@ function TransaksiBody({ accent }: { accent: string }) {
           >
             <div className={`mb-1 h-8 rounded ${index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50'}`} />
             <p className="truncate text-[10px] font-semibold text-slate-700">{item.name}</p>
-            <p className="text-[10px] text-slate-400">{item.price}</p>
+            <p className="text-[10px] text-slate-500">{item.price}</p>
           </div>
         ))}
       </div>
       <div className="flex w-24 flex-col rounded-lg border border-slate-100 bg-white p-2">
-        <p className="text-[9px] font-semibold text-slate-400">Pesanan #1287</p>
+        <p className="text-[9px] font-semibold text-slate-500">Pesanan #1287</p>
         <div className="mt-1 space-y-1">
           {['2 × Kopi Susu', '1 × Nasi Goreng', '3 × Es Teh'].map((row) => (
             <p key={row} className="text-[9px] text-slate-500">
@@ -125,7 +125,7 @@ function TransaksiBody({ accent }: { accent: string }) {
           ))}
         </div>
         <div className="mt-auto border-t border-dashed border-slate-200 pt-1">
-          <p className="text-[9px] text-slate-400">Total</p>
+          <p className="text-[9px] text-slate-500">Total</p>
           <p className="text-xs font-bold text-slate-800">Rp96.000</p>
         </div>
         <div className={`mt-1 rounded bg-gradient-to-r py-1 text-center text-[9px] font-bold text-white ${accent}`}>
@@ -145,7 +145,7 @@ function LaporanBody({ accent }: { accent: string }) {
   ];
   return (
     <div className="rounded-lg border border-slate-100 bg-white p-2">
-      <div className="grid grid-cols-[1.4fr_auto_auto] items-center gap-2 border-b border-slate-100 pb-1 text-[9px] font-semibold text-slate-400">
+      <div className="grid grid-cols-[1.4fr_auto_auto] items-center gap-2 border-b border-slate-100 pb-1 text-[9px] font-semibold text-slate-500">
         <span>Produk</span>
         <span>Terjual</span>
         <span>Omzet</span>
