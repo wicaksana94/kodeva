@@ -240,7 +240,7 @@ utama). Rincian iterasi (termasuk kesalahan yang ditemukan) ada di `AI_LOG.md` �
 - **A. Landing + blog + CMS:** semua section landing dapat diedit marketing (termasuk produk
   unggulan, testimoni, FAQ, dan copy), lead form tersimpan & terlihat di Studio, blog dengan
   pagination + slug, draft/publish, penautan produk, revalidasi tanpa deploy.
-- **B. Mini marketplace:** 8 produk + filter kategori, detail dengan paket Basic/Pro/Business,
+- **B. Mini marketplace:** 8 produk + filter kategori (tiap card punya tombol CTA), detail dengan paket Basic/Pro/Business,
   promo + kuota lintas baris, keranjang persisten, checkout dengan simulasi sukses/gagal,
   state loading/error/kosong, mobile-friendly.
 - **C. Marketing:** Lighthouse mobile Performance **97** di landing (target ≥80); event GA4
@@ -373,7 +373,8 @@ docs/lighthouse/       # bukti audit (JSON/HTML/PNG)
 2. **Landing Page** (singleton): edit hero (judul, gambar, statistik singkat), produk unggulan
    (pilih dari daftar produk valid + label tombol), testimoni (teks + foto opsional — kosong =
    inisial nama), FAQ, dan copy form lead — semua berlabel Bahasa Indonesia, dikelompokkan per
-   seksi. Klik **Publish** → webhook memicu revalidasi → perubahan tampil dalam hitungan detik.
+   seksi. Klik **Publish** → webhook memicu revalidasi → perubahan tampil dalam hitungan detik (di
+localhost tanpa webhook: ≤ ±1 menit — TTL development).
 3. **Artikel Blog**: buat draft → isi judul/ringkasan/kategori/body (mendukung heading, kutipan,
    list, tautan, gambar) → pilih produk terkait → **Publish**.
 4. **Lead yang masuk** tampil sebagai dokumen `Lead` di Studio (nama, kontak, UTM asal) — siap

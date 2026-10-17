@@ -327,5 +327,8 @@ copy/konten); (d) pengecekan hasil deploy.)_
     development (webhook tidak bisa menghubungi localhost); `cacheLife` dibuat sadar environment
     (dev 5/15/60 detik, produksi 5/10 menit) dengan nilai literal, diverifikasi marker test tanpa
     restart + build hijau (§4.11).
-22. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+22. Permintaan user: tombol CTA di card katalog — tombol "Lihat Detail" ditambahkan di tiap card
+    `/katalog` (seluruh card tetap satu tautan; ikon chevron + gaya tombol utama); diverifikasi
+    browser headless: 8/8 card menampilkan CTA.
+23. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
