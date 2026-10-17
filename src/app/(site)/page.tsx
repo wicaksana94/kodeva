@@ -32,7 +32,8 @@ export default async function LandingPage() {
   const featuredProducts = getProductsByIds(content.featuredProductIds);
   const heroImageSrc = sanityImageSrc(content.hero.image);
   const heroMockupProduct =
-    getProductBySlug(content.hero.mockupProductId ?? 'kasir-prima') ?? getProductBySlug('kasir-prima');
+    getProductBySlug(content.hero.mockupProductId ?? 'kasir-prima') ??
+    getProductBySlug('kasir-prima');
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
@@ -73,59 +74,66 @@ export default async function LandingPage() {
           aria-hidden="true"
           className="absolute -top-24 -right-24 size-96 rounded-full bg-indigo-100/60 blur-3xl"
         />
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 lg:grid-cols-2 lg:py-20">
-          <div>
-            {content.hero.eyebrow && (
-              <p className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-800">
-                <span className="size-1.5 rounded-full bg-amber-500" aria-hidden="true" />
-                {content.hero.eyebrow}
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-14 lg:grid-cols-2 lg:gap-10 lg:py-20">
+          <div className="contents lg:block">
+            <div>
+              {content.hero.eyebrow && (
+                <p className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-800">
+                  <span className="size-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+                  {content.hero.eyebrow}
+                </p>
+              )}
+              <h1 className="mt-4 text-3xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                {content.hero.title}
+              </h1>
+            </div>
+            <div className="order-3 lg:order-none">
+              <p className="max-w-xl text-base text-slate-600 sm:text-lg lg:mt-4">
+                {content.hero.subtitle}
               </p>
-            )}
-            <h1 className="mt-4 text-3xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-              {content.hero.title}
-            </h1>
-            <p className="mt-4 max-w-xl text-base text-slate-600 sm:text-lg">
-              {content.hero.subtitle}
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <TrackedCta
-                href={content.hero.ctaPrimaryHref || '/katalog'}
-                label={content.hero.ctaPrimaryLabel}
-                ctaId="hero-primary-cta"
-                location="hero"
-                campaign={campaignName}
-              />
-              {content.hero.ctaSecondaryLabel && (
+              <div className="mt-7 flex flex-wrap gap-3">
                 <TrackedCta
-                  href={content.hero.ctaSecondaryHref || '#konsultasi'}
-                  label={content.hero.ctaSecondaryLabel}
-                  ctaId="hero-secondary-cta"
+                  href={content.hero.ctaPrimaryHref || '/katalog'}
+                  label={content.hero.ctaPrimaryLabel}
+                  ctaId="hero-primary-cta"
                   location="hero"
                   campaign={campaignName}
-                  variant="secondary"
                 />
+                {content.hero.ctaSecondaryLabel && (
+                  <TrackedCta
+                    href={content.hero.ctaSecondaryHref || '#konsultasi'}
+                    label={content.hero.ctaSecondaryLabel}
+                    ctaId="hero-secondary-cta"
+                    location="hero"
+                    campaign={campaignName}
+                    variant="secondary"
+                  />
+                )}
+              </div>
+              {(content.promoLabel || content.promoNote) && (
+                <p className="mt-5 flex items-center gap-2 text-sm font-semibold text-amber-800">
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 shrink-0 rounded-full bg-amber-500"
+                  />
+                  <span>
+                    {content.promoLabel ?? campaignName}
+                    {content.promoNote ? ` — ${content.promoNote}` : ''}
+                  </span>
+                </p>
               )}
+              <dl className="mt-8 grid max-w-md grid-cols-3 gap-4">
+                {content.hero.stats.map((stat) => (
+                  <div key={stat._key ?? stat.label}>
+                    <dt className="text-xs text-slate-500">{stat.label}</dt>
+                    <dd className="text-lg font-extrabold text-slate-900">{stat.value}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-            {(content.promoLabel || content.promoNote) && (
-              <p className="mt-5 flex items-center gap-2 text-sm font-semibold text-amber-800">
-                <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-amber-500" />
-                <span>
-                  {content.promoLabel ?? campaignName}
-                  {content.promoNote ? ` — ${content.promoNote}` : ''}
-                </span>
-              </p>
-            )}
-            <dl className="mt-8 grid max-w-md grid-cols-3 gap-4">
-              {content.hero.stats.map((stat) => (
-                <div key={stat._key ?? stat.label}>
-                  <dt className="text-xs text-slate-500">{stat.label}</dt>
-                  <dd className="text-lg font-extrabold text-slate-900">{stat.value}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
-          <div className="relative">
+          <div className="relative order-2 lg:order-none">
             {heroImageSrc ? (
               <div className="relative aspect-[16/11] overflow-hidden rounded-3xl border border-slate-200 shadow-xl">
                 <Image
