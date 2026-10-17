@@ -47,8 +47,8 @@ export async function SiteFooter() {
           <div>
             <h2 className="text-sm font-bold text-slate-900">Kontak</h2>
             <ul className="mt-3 space-y-2 text-sm text-slate-600">
-              <li>halo@kodeva.example (dummy)</li>
-              <li>WhatsApp: 0812-0000-0000 (dummy)</li>
+              <li>halo@kodeva.example</li>
+              <li>WhatsApp: 0812-0000-0000</li>
               <li>Jakarta Selatan, Indonesia</li>
             </ul>
           </div>
