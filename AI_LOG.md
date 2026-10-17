@@ -187,6 +187,21 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
   fallback: log server tanpa error fetch), kemudian dipulihkan ke nilai normal dan state
   dokumen dicek via query API. lint/typecheck/53 test hijau.
 
+### 4.10 Item array hasil seed tanpa `_key` — FAQ tidak bisa dikelola di Studio (ditemukan user)
+
+- **Nat:** user melaporkan konten FAQ tidak bisa diatur lewat Sanity Studio. Penyebab: seed
+  script menulis item array-of-objects (`faqItems`, `testimonials`, `hero.stats`) tanpa `_key`
+  (fungsi `stripKeys` sengaja menghapusnya). Sanity mewajibkan `_key` unik per item untuk
+  dokumen — konten yang dibuat via API/script harus menulisnya sendiri; tanpa `_key`,
+  pengelolaan item di Studio (edit, urutkan, hapus) tidak andal.
+- **Perbaikan:** `stripKeys()` diganti `withKeys(items, prefix)` yang menulis `_key`
+  deterministik (`faq-0`, `testi-1`, `stat-2`, …) sehingga seed tetap idempotent; dokumen di
+  dataset di-seed ulang.
+- **Verifikasi:** query API memastikan `_key` ada di ketiga array; marker test FAQ end-to-end —
+  `faqItems[0].question` diganti `[[CMS-FAQ]]` via API, **tampil di HTML halaman** (render dari
+  Sanity, log server tanpa error fetch), lalu dikembalikan ke teks asli. lint/typecheck/53
+  test hijau.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -288,5 +303,8 @@ copy/konten); (d) pengecekan hasil deploy.)_
 19. Audit kepatuhan requirement CMS ("konten tiap section bisa diedit non-teknis"): statistik
     hero, label tombol produk unggulan, dan foto testimoni ditambahkan ke schema Sanity —
     sebelumnya dua yang pertama hardcoded di `page.tsx`; diverifikasi marker test (§4.9).
-20. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+20. Laporan user: konten FAQ tidak bisa dikelola lewat Studio → item array hasil seed tidak
+    punya `_key`; `stripKeys` diganti `withKeys` (deterministik), dokumen di-seed ulang, dan
+    diverifikasi marker test FAQ end-to-end (§4.10).
+21. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.

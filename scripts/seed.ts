@@ -20,12 +20,13 @@ function slugField(current: string) {
   return { _type: 'slug' as const, current };
 }
 
-function stripKeys<T extends { _key?: string }>(items: T[]): Omit<T, '_key'>[] {
-  return items.map((item) => {
-    const clone = { ...item };
-    delete clone._key;
-    return clone;
-  });
+/**
+ * Sanity mewajibkan setiap item array-of-objects punya `_key` unik agar bisa
+ * diedit/diurutkan di Studio. Item yang dibuat via API/script harus menulisnya
+ * sendiri — nilai di sini deterministik supaya seed tetap idempotent.
+ */
+function withKeys<T extends { _key?: string }>(items: T[], prefix: string): (T & { _key: string })[] {
+  return items.map((item, index) => ({ ...item, _key: item._key ?? `${prefix}-${index}` }));
 }
 
 async function main() {
@@ -55,7 +56,7 @@ async function main() {
       eyebrow: hero.eyebrow,
       title: hero.title,
       subtitle: hero.subtitle,
-      stats: stripKeys(hero.stats),
+      stats: withKeys(hero.stats, 'stat'),
       ctaPrimaryLabel: hero.ctaPrimaryLabel,
       ctaPrimaryHref: hero.ctaPrimaryHref,
       ctaSecondaryLabel: hero.ctaSecondaryLabel,
@@ -67,10 +68,10 @@ async function main() {
     featuredCtaLabel: fallbackLanding.featuredCtaLabel,
     testimonialsHeading: fallbackLanding.testimonialsHeading,
     testimonialsSubheading: fallbackLanding.testimonialsSubheading,
-    testimonials: stripKeys(fallbackLanding.testimonials),
+    testimonials: withKeys(fallbackLanding.testimonials, 'testi'),
     faqHeading: fallbackLanding.faqHeading,
     faqSubheading: fallbackLanding.faqSubheading,
-    faqItems: stripKeys(fallbackLanding.faqItems),
+    faqItems: withKeys(fallbackLanding.faqItems, 'faq'),
     leadHeading: fallbackLanding.leadHeading,
     leadSubheading: fallbackLanding.leadSubheading,
     leadBullets: fallbackLanding.leadBullets,
