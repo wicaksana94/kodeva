@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { PostSummary } from '@/sanity/types';
 import { formatPostDate } from '@/lib/blog';
-import { sanityImageLoader, sanityImageSrc } from '@/lib/sanity/image';
+import { sanityImageSrc } from '@/lib/sanity/image';
 
 export function PostCard({ post }: { post: PostSummary }) {
   const coverSrc = sanityImageSrc(post.cover);
@@ -13,7 +13,6 @@ export function PostCard({ post }: { post: PostSummary }) {
           {coverSrc ? (
             <Image
               src={coverSrc}
-              loader={sanityImageLoader}
               alt={post.cover?.alt || post.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"

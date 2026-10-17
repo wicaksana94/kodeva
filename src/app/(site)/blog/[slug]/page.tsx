@@ -6,7 +6,7 @@ import { getPostBySlug, getPostSlugs } from '@/sanity/content';
 import { estimateReadingMinutes, formatPostDate } from '@/lib/blog';
 import { getProductsByIds } from '@/lib/catalog';
 import { absoluteUrl, getSiteUrl } from '@/lib/site';
-import { sanityImageLoader, sanityImageSrc } from '@/lib/sanity/image';
+import { sanityImageSrc } from '@/lib/sanity/image';
 import { PostBody } from '@/components/blog/post-body';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { TrackedCta } from '@/components/marketing/tracked-cta';
@@ -127,7 +127,6 @@ export default async function BlogPostPage(props: PageProps<'/blog/[slug]'>) {
         <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl border border-slate-200">
           <Image
             src={coverSrc}
-            loader={sanityImageLoader}
             alt={post.cover?.alt || post.title}
             fill
             sizes="(max-width: 768px) 100vw, 720px"

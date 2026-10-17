@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   images: {
+    loader: 'custom',
+    loaderFile: './src/lib/sanity/image-loader.ts',
     remotePatterns: [
       {
         protocol: 'https',

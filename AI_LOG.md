@@ -238,6 +238,23 @@ test hijau.
   dipulihkan; klik tombol kartu unggulan di browser headless memunculkan event `cta_click` di
   `?debug=events`. lint/typecheck/53 test + build hijau.
 
+### 4.13 Laporan user: `/` gagal render setelah banner hero diunggah — loader fungsi melintasi batas Server→Client
+
+- **Nat:** setelah user mengunggah gambar hero lewat Studio, halaman `/` memunculkan overlay
+  "Blocking Route" + "Next.js encountered uncached data during prerendering" (dan sempat 500).
+  Akar masalahnya bukan cache: `sanityImageLoader` adalah **fungsi** yang diteruskan sebagai prop
+  `loader` dari Server Component ke `next/image`. Selama hero belum pernah terisi, jalur ini tidak
+  pernah dieksekusi — begitu banner diunggah, batas Server→Client dilanggar
+  ("Functions cannot be passed directly to Client Components").
+- **Perbaikan:** memakai pola resmi dokumen — loader global lewat `images.loaderFile`
+  (`src/lib/sanity/image-loader.ts`; modul `'use client'`, default export), dan prop `loader`
+  dihapus dari lima call-site (`page.tsx` hero + testimoni, kartu artikel, body artikel, sampul
+  artikel).
+- **Verifikasi:** reproduksi di salinan project (server dev user tidak diganggu): HTTP 500 → 200,
+  srcset memakai URL CDN langsung (`?w=…&q=75&fit=max&auto=format`), fetch gambar 200. `pnpm build`
+  hijau (28 rute) + smoke test `next start`: `/` 200 dengan judul CMS ter-bake, seluruh rute utama
+  200.
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -353,5 +370,9 @@ copy/konten); (d) pengecekan hasil deploy.)_
     landing, SEO, preview WhatsApp, ekspansi MY/SG) memicu audit hero: teks promo kini selalu
     tampil walau banner diisi, produk mockup hero dapat dipilih di CMS, dan klik tombol kartu
     produk unggulan ter-track `cta_click`; diverifikasi marker test + klik headless (§4.12).
-24. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+24. Laporan user: `/` gagal render setelah banner hero diunggah — `sanityImageLoader` adalah
+    fungsi yang dilewatkan dari Server Component ke `next/image` (pelanggaran batas RSC); loader
+    dipindah ke `images.loaderFile` global dan prop `loader` dihapus dari lima call-site;
+    diverifikasi reproduksi 500→200 + build & smoke produksi hijau (§4.13).
+25. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.

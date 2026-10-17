@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { getLandingContent } from '@/sanity/content';
 import { getProductsByIds, getProductBySlug } from '@/lib/catalog';
 import { productInitials } from '@/lib/ui/accents';
-import { sanityImageLoader, sanityImageSrc } from '@/lib/sanity/image';
+import { sanityImageSrc } from '@/lib/sanity/image';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { ProductMockup } from '@/components/marketplace/product-mockup';
 import { TrackedCta } from '@/components/marketing/tracked-cta';
@@ -130,7 +130,6 @@ export default async function LandingPage() {
               <div className="relative aspect-[16/11] overflow-hidden rounded-3xl border border-slate-200 shadow-xl">
                 <Image
                   src={heroImageSrc}
-                  loader={sanityImageLoader}
                   alt={content.hero.image?.alt || content.hero.imageAlt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 560px"
@@ -234,7 +233,6 @@ export default async function LandingPage() {
                     {photoSrc ? (
                       <Image
                         src={photoSrc}
-                        loader={sanityImageLoader}
                         alt={testimonial.photo?.alt || testimonial.name}
                         width={40}
                         height={40}

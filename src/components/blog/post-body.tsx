@@ -4,7 +4,7 @@ import {
   type PortableTextBlock,
   type PortableTextComponents,
 } from '@portabletext/react';
-import { sanityImageLoader, sanityImageSrc } from '@/lib/sanity/image';
+import { sanityImageSrc } from '@/lib/sanity/image';
 import type { SanityImage } from '@/sanity/types';
 
 const components: PortableTextComponents = {
@@ -56,7 +56,6 @@ const components: PortableTextComponents = {
           <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-slate-200">
             <Image
               src={src}
-              loader={sanityImageLoader}
               alt={value.alt || ''}
               fill
               sizes="(max-width: 768px) 100vw, 720px"
