@@ -149,11 +149,15 @@ fungsi murni (kuota/harga/UTM) bisa diuji langsung tanpa DOM.
 Konten CMS dibungkus `"use cache"` + `cacheLife({stale: 300, revalidate: 600})` + `cacheTag`
 (`landing`, `posts`, `post-<slug>`). Halaman ter-prerender statis (cepat, murah), lalu webhook
 Sanity memanggil `revalidateTag(tag, 'max')` sehingga publish **langsung** tampil. TTL 10 menit
-adalah jaring pengaman bila webhook mati — sedangkan di development TTL dipendekkan (5/15/60
-detik) karena webhook tidak bisa memanggil `localhost`, sehingga perubahan dari Studio tampil
-tanpa restart (`cacheLife` ditulis literal agar tetap dapat dianalisis statis). Konsekuensi yang diterima secara sadar: route dinamis
-ber-`searchParams` (`/katalog`, `/blog?page=`) memakai pola static shell + `<Suspense>` untuk
-bagian dinamisnya.
+adalah jaring pengaman bila webhook mati — sedangkan di development refresh dipercepat
+(`revalidate` 30 detik) karena webhook tidak bisa memanggil `localhost`, sehingga perubahan dari
+Studio tampil tanpa restart. Nilai dev sengaja tetap di atas ambang prerender Next
+(`stale`/`expire` ≥ 5 menit) agar prerender dan App Shell tetap valid; `cacheLife` ditulis literal
+agar tetap dapat dianalisis statis. Rute detail produk/artikel (`/produk/[slug]`, `/blog/[slug]`)
+di-opt-out dari validasi instant (`export const instant = false`) karena seluruh kontennya
+bergantung pada URL dan semua slug sudah diprerender. Konsekuensi yang diterima secara sadar:
+route dinamis ber-`searchParams` (`/katalog`, `/blog?page=`) memakai pola static shell +
+`<Suspense>` untuk bagian dinamisnya.
 
 ### 4.2 Konten CMS, data domain di kode
 

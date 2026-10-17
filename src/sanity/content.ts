@@ -56,9 +56,13 @@ function normalizeLanding(doc: Partial<LandingContent>): LandingContent {
 export async function getLandingContent(): Promise<LandingContent> {
   'use cache';
   if (process.env.NODE_ENV === 'development') {
-    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // TTL dipendekkan di lokal: webhook Sanity tidak bisa memanggil localhost,
     // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
-    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+    // Kesegaran server tetap dijaga `revalidate: 30` (regenerasi latar). `stale`
+    // harus >= 5 menit (dan `expire` >= 5 menit) agar entri ikut prerender +
+    // App Shell; nilai lebih pendek memicu diagnostik dev "uncached/URL data
+    // during prerendering" (lihat dokumen cacheLife § Prerendering behavior).
+    cacheLife({ stale: 300, revalidate: 30, expire: 300 });
   } else {
     // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
     cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
@@ -111,9 +115,13 @@ function toSummary(post: PostDetail): PostSummary {
 export async function getPostsPage(page: number): Promise<PostsPage> {
   'use cache';
   if (process.env.NODE_ENV === 'development') {
-    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // TTL dipendekkan di lokal: webhook Sanity tidak bisa memanggil localhost,
     // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
-    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+    // Kesegaran server tetap dijaga `revalidate: 30` (regenerasi latar). `stale`
+    // harus >= 5 menit (dan `expire` >= 5 menit) agar entri ikut prerender +
+    // App Shell; nilai lebih pendek memicu diagnostik dev "uncached/URL data
+    // during prerendering" (lihat dokumen cacheLife § Prerendering behavior).
+    cacheLife({ stale: 300, revalidate: 30, expire: 300 });
   } else {
     // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
     cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
@@ -144,9 +152,13 @@ export async function getPostsPage(page: number): Promise<PostsPage> {
 export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
   'use cache';
   if (process.env.NODE_ENV === 'development') {
-    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // TTL dipendekkan di lokal: webhook Sanity tidak bisa memanggil localhost,
     // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
-    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+    // Kesegaran server tetap dijaga `revalidate: 30` (regenerasi latar). `stale`
+    // harus >= 5 menit (dan `expire` >= 5 menit) agar entri ikut prerender +
+    // App Shell; nilai lebih pendek memicu diagnostik dev "uncached/URL data
+    // during prerendering" (lihat dokumen cacheLife § Prerendering behavior).
+    cacheLife({ stale: 300, revalidate: 30, expire: 300 });
   } else {
     // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
     cacheLife({ stale: 300, revalidate: 600, expire: 86400 });
@@ -169,9 +181,13 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
 export async function getPostSlugs(): Promise<string[]> {
   'use cache';
   if (process.env.NODE_ENV === 'development') {
-    // TTL dipendekkan drastis di lokal: webhook Sanity tidak bisa memanggil localhost,
+    // TTL dipendekkan di lokal: webhook Sanity tidak bisa memanggil localhost,
     // tanpa ini perubahan dari Studio baru tampil setelah beberapa menit.
-    cacheLife({ stale: 5, revalidate: 15, expire: 60 });
+    // Kesegaran server tetap dijaga `revalidate: 30` (regenerasi latar). `stale`
+    // harus >= 5 menit (dan `expire` >= 5 menit) agar entri ikut prerender +
+    // App Shell; nilai lebih pendek memicu diagnostik dev "uncached/URL data
+    // during prerendering" (lihat dokumen cacheLife § Prerendering behavior).
+    cacheLife({ stale: 300, revalidate: 30, expire: 300 });
   } else {
     // Jaring pengaman bila webhook mati; saat webhook aktif publish tampil seketika.
     cacheLife({ stale: 300, revalidate: 600, expire: 86400 });

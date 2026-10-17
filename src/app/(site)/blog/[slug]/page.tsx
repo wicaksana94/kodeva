@@ -13,6 +13,11 @@ import { TrackedCta } from '@/components/marketing/tracked-cta';
 import { JsonLd } from '@/components/seo/json-ld';
 import { DEFAULT_CAMPAIGN } from '@/lib/campaign';
 
+// Halaman detail sepenuhnya bergantung pada `params`, dan semua slug sudah
+// diprerender via `generateStaticParams`. Navigasi yang menunggu URL data wajar
+// di sini, jadi segmen ini di-opt-out dari validasi instant (dokumen `instant`).
+export const instant = false;
+
 export async function generateStaticParams() {
   const slugs = await getPostSlugs();
   return slugs.map((slug) => ({ slug }));

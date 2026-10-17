@@ -255,6 +255,23 @@ test hijau.
   hijau (28 rute) + smoke test `next start`: `/` 200 dengan judul CMS ter-bake, seluruh rute utama
   200.
 
+### 4.14 Diagnostik dev "uncached / URL data during prerendering" setelah fix cache (§4.11)
+
+- **Nat:** setelah error loader beres (§4.13), validasi instant bawaan Cache Components masih
+  menandai `/`, `/blog/[slug]`, dan `/produk/[slug]` di overlay dev. Penelusuran ke dokumen
+  `cacheLife` menemukan akarnya: TTL development pilihan §4.11 (`stale: 5`, `expire: 60`) berada
+  **di bawah ambang prerender** Next (`stale`/`expire` < 5 menit → entri dikecualikan dari
+  prerender/App Shell → "dynamic hole" → issue "uncached data"); `await props.params` di rute
+  detail wajar divalidasi sebagai "URL data" karena berada di luar `<Suspense>`.
+- **Perbaikan:** dua hal. (1) TTL development menjadi `{stale: 300, revalidate: 30, expire: 300}`
+  — kesegaran server dev tetap datang dari `revalidate: 30` (regenerasi latar), sementara
+  `stale`/`expire` memenuhi ambang prerender. (2) Rute detail produk & artikel di-opt-out dari
+  validasi instant dengan `export const instant = false` (dokumen `instant`): seluruh kontennya
+  memang bergantung pada URL, dan semua slug sudah diprerender lewat `generateStaticParams`.
+- **Verifikasi:** log dev bersih (tidak ada satu pun error validasi), overlay headless browser
+  bersih di `/` dan rute detail; lint/typecheck/53 test + build (28 rute) hijau; smoke test
+  produksi utuh (judul CMS ter-bake, gambar hero dari CDN, semua rute 200).
+
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
 ### 5.1 Logika harga & kuota promo (`src/lib/cart/logic.ts`) — 22 unit test
@@ -374,5 +391,8 @@ copy/konten); (d) pengecekan hasil deploy.)_
     fungsi yang dilewatkan dari Server Component ke `next/image` (pelanggaran batas RSC); loader
     dipindah ke `images.loaderFile` global dan prop `loader` dihapus dari lima call-site;
     diverifikasi reproduksi 500→200 + build & smoke produksi hijau (§4.13).
-25. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
+25. Sisa diagnostik validasi instant di dev: TTL dev dinaikkan ke `{stale: 300, revalidate: 30,
+    expire: 300}` (kesegaran tetap dari `revalidate`) dan rute detail di-opt-out
+    `export const instant = false`; log & overlay dev bersih, build + smoke produksi hijau (§4.14).
+26. Deploy Vercel + Sanity, push repo, dan pengisian §6 oleh user — langkah penutup yang
     tersisa setelah sesi ini.
