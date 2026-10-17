@@ -9,7 +9,8 @@ marketplace lisensi software (kasir, HR & payroll, add-on).
 - **AI log:** lihat [`AI_LOG.md`](./AI_LOG.md)
 - **Laporan Lighthouse:** lihat [`docs/lighthouse/`](./docs/lighthouse) (JSON + HTML + screenshot)
 - **Waktu pengerjaan:** ±1,5 jam, satu sesi pada 17 Oktober 2026 (implementasi 09:45–10:20 WIB
-  menurut riwayat commit, di luar analisis brief & sesi tanya-jawab awal). Rincian per
+  menurut riwayat commit, di luar analisis brief & sesi tanya-jawab awal), ditambah sesi
+  lanjutan untuk deploy produksi + fitur bonus (region selector). Rincian per
   milestone ada di commit history dan [`AI_LOG.md`](./AI_LOG.md).
 
 > Semua konten (produk, harga, testimoni, artikel, kontak) adalah data dummy untuk keperluan
@@ -76,6 +77,8 @@ marketplace lisensi software (kasir, HR & payroll, add-on).
 9. **Blog** — `/blog`, buka artikel, perhatikan JSON-LD + artikel terkait produk.
 10. **CMS** — buka `/studio`, ubah judul hero → publish → landing berubah dalam detik
     (setelah webhook terpasang).
+11. **Region (bonus)** — dropdown bendera di navbar: Indonesia aktif secara default; pilih
+    Malaysia/Singapore → pop-up "segera hadir".
 
 ---
 

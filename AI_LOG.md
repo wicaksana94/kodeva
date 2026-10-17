@@ -203,8 +203,8 @@ blocking-prerender-current-time` (aturan baru Cache Components di Next 16).
   dataset di-seed ulang.
 - **Verifikasi:** query API memastikan `_key` ada di ketiga array; marker test FAQ end-to-end —
   `faqItems[0].question` diganti `[[CMS-FAQ]]` via API, **tampil di HTML halaman** (render dari
-Sanity, log server tanpa error fetch), lalu dikembalikan ke teks asli. lint/typecheck/53
-test hijau.
+  Sanity, log server tanpa error fetch), lalu dikembalikan ke teks asli. lint/typecheck/53
+  test hijau.
 
 ### 4.11 Urutan FAQ di web tidak ikut Studio — cache konten basi di development (ditemukan user)
 
@@ -213,7 +213,7 @@ test hijau.
   cache konten: webhook revalidasi Sanity tidak bisa memanggil `localhost`, sehingga di dev
   perubahan menunggu TTL produksi (5–10 menit) dan revalidasi latar sering gagal karena jaringan.
 - **Perbaikan:** `cacheLife` kini sadar environment — development `{stale: 5, revalidate: 15,
-  expire: 60}` detik, produksi tetap `{stale: 300, revalidate: 600, expire: 86400}`. Percobaan
+expire: 60}` detik, produksi tetap `{stale: 300, revalidate: 600, expire: 86400}`. Percobaan
   pertama memakai konstanta bersama berisi ternary `process.env.NODE_ENV`; Next menandainya
   sebagai data uncached ("uncached data during prerendering" berulang di log dev), sehingga nilai
   akhir ditulis **literal** di cabang `if/else` dalam tiap fungsi `"use cache"` agar tetap dapat
@@ -227,7 +227,7 @@ test hijau.
 
 - **Nat:** permintaan "hero section harus customizable" (konteks: marketing ganti banner/promo
   mingguan tanpa developer) memicu audit alur hero. Hampir semua sudah CMS-driven, tetapi ada dua
-  gap nyata: (a) teks `promoLabel`/`promoNote` hanya dirender di kasus *tanpa* gambar hero —
+  gap nyata: (a) teks `promoLabel`/`promoNote` hanya dirender di kasus _tanpa_ gambar hero —
   begitu marketing mengunggah banner mingguan, teks promo justru hilang; (b) produk mockup hero
   (kasus tanpa banner) hardcoded `getProductBySlug('kasir-prima')` di `page.tsx` sehingga produk
   yang ditampilkan tidak bisa diganti dari Studio.
@@ -256,8 +256,7 @@ test hijau.
   artikel).
 - **Verifikasi:** reproduksi di salinan project (server dev user tidak diganggu): HTTP 500 → 200,
   srcset memakai URL CDN langsung (`?w=…&q=75&fit=max&auto=format`), fetch gambar 200. `pnpm build`
-  hijau (28 rute) + smoke test `next start`: `/` 200 dengan judul CMS ter-bake, seluruh rute utama
-  200.
+  hijau (28 rute) + smoke test `next start`: `/` 200 dengan judul CMS ter-bake, seluruh rute utama 200.
 
 ### 4.14 Diagnostik dev "uncached / URL data during prerendering" setelah fix cache (§4.11)
 
@@ -275,6 +274,21 @@ test hijau.
 - **Verifikasi:** log dev bersih (tidak ada satu pun error validasi), overlay headless browser
   bersih di `/` dan rute detail; lint/typecheck/53 test + build (28 rute) hijau; smoke test
   produksi utuh (judul CMS ter-bake, gambar hero dari CDN, semua rute 200).
+
+### 4.15 Pemilih region di navbar — permintaan user
+
+- **Permintaan:** dropdown region di navbar dengan ikon bendera Indonesia (default), Malaysia,
+  dan Singapore. Klik Indonesia tidak melakukan apa-apa; klik Malaysia/Singapore memunculkan
+  pop-up "segera hadir".
+- **Implementasi:** `src/components/site/region-selector.tsx` — bendera SVG inline (tanpa aset
+  eksternal), menu `role="menu"` dengan `aria-haspopup`/`aria-expanded`, ESC & klik di luar
+  menutup, checkmark pada region aktif; dialog "Segera hadir di …" mengikuti pola aksesibilitas
+  CartDrawer (fokus pindah ke tombol, ESC/backdrop menutup, scroll terkunci, fokus dipulihkan).
+  Indonesia tetap region aktif — MY/SG tidak mengubah pilihan, hanya menampilkan dialog.
+- **Verifikasi:** headless CDP pada build produksi lokal — 3 item menu benar + `aria-expanded`,
+  dialog Malaysia & Singapore tampil dengan judul per region, tutup via tombol & ESC, fokus awal
+  di dalam dialog, klik Indonesia tanpa dialog; viewport 390px tanpa overflow horizontal;
+  lint/typecheck/53 test + build hijau.
 
 ## 5. Bagian implementasi yang banyak dibantu AI + edge case yang diuji
 
@@ -396,7 +410,7 @@ copy/konten); (d) pengecekan hasil deploy.)_
     dipindah ke `images.loaderFile` global dan prop `loader` dihapus dari lima call-site;
     diverifikasi reproduksi 500→200 + build & smoke produksi hijau (§4.13).
 25. Sisa diagnostik validasi instant di dev: TTL dev dinaikkan ke `{stale: 300, revalidate: 30,
-    expire: 300}` (kesegaran tetap dari `revalidate`) dan rute detail di-opt-out
+expire: 300}` (kesegaran tetap dari `revalidate`) dan rute detail di-opt-out
     `export const instant = false`; log & overlay dev bersih, build + smoke produksi hijau (§4.14).
 26. Deploy produksi: project Vercel `kodeva` live di https://kodeva-dev.vercel.app (domain
     produksi di-set ke `kodeva-dev`; `NEXT_PUBLIC_SITE_URL` disesuaikan + redeploy) — deploy
@@ -404,3 +418,5 @@ copy/konten); (d) pengecekan hasil deploy.)_
     `a478620`); repo publik ter-push ke https://github.com/wicaksana94/kodeva. Sisa langkah
     penutup: CORS + webhook Sanity (menunggu login CLI user), undangan reviewer, pengisian §6
     oleh user, dan email ke panitia.
+27. Permintaan user: pemilih region di navbar (bendera ID default, MY & SG) — Indonesia no-op,
+    MY/SG memunculkan dialog "Segera hadir"; diverifikasi headless pada build produksi (§4.15).
