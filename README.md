@@ -129,6 +129,16 @@ pnpm seed    # idempotent: menulis landingPage, kategori, dan 3 artikel demo ke 
 
 ## 4. Keputusan teknis (dan alasannya)
 
+**Stack & alasan singkatnya:** **Next.js 16 (App Router) + TypeScript** — satu framework untuk
+situs statis/cepat + API routes dalam satu deploy (brief fullstack, TS wajib), dan Cache
+Components-nya pas untuk kebutuhan revalidasi konten CMS; **Sanity** — CMS headless dengan editing
+real-time, Studio dapat di-embed satu deploy, dan data terstruktur (bukan sekadar WYSIWYG) sehingga
+marketing tetap memilih dari opsi valid; **Tailwind CSS 4** — UI konsisten dengan iterasi cepat
+(elemen kustom kecil, tanpa perlu design system berat); **Zustand** — state keranjang minimalis
+dengan `persist` + rehidrasi terkontrol (dibanding Redux: boilerplate jauh lebih kecil untuk
+kebutuhan satu store); **Zod** — satu schema validasi dipakai client _dan_ server; **Vitest** —
+fungsi murni (kuota/harga/UTM) bisa diuji langsung tanpa DOM.
+
 ### 4.1 Next.js 16 App Router dengan Cache Components + on-demand revalidation
 
 Konten CMS dibungkus `"use cache"` + `cacheLife({stale: 300, revalidate: 600})` + `cacheTag`
