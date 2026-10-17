@@ -398,7 +398,8 @@ copy/konten); (d) pengecekan hasil deploy.)_
 25. Sisa diagnostik validasi instant di dev: TTL dev dinaikkan ke `{stale: 300, revalidate: 30,
     expire: 300}` (kesegaran tetap dari `revalidate`) dan rute detail di-opt-out
     `export const instant = false`; log & overlay dev bersih, build + smoke produksi hijau (§4.14).
-26. Deploy produksi: project Vercel `kodeva` live di https://kodeva-ten.vercel.app — deploy
+26. Deploy produksi: project Vercel `kodeva` live di https://kodeva-dev.vercel.app (domain
+    produksi di-set ke `kodeva-dev`; `NEXT_PUBLIC_SITE_URL` disesuaikan + redeploy) — deploy
     pertama gagal `ERR_PNPM_IGNORED_BUILDS: unrs-resolver` (fix `allowBuilds`, commit
     `a478620`); repo publik ter-push ke https://github.com/wicaksana94/kodeva. Sisa langkah
     penutup: CORS + webhook Sanity (menunggu login CLI user), undangan reviewer, pengisian §6

@@ -4,9 +4,9 @@ Situs demo untuk brand fiktif **Kodeva**: landing page campaign, blog ber-CMS, d
 marketplace lisensi software (kasir, HR & payroll, add-on) — dibangun sesuai brief
 _Technical Skill Test Fullstack Developer DSG_.
 
-- **Live demo:** `https://kodeva-ten.vercel.app`
+- **Live demo:** `https://kodeva-dev.vercel.app`
 - **Repositori:** `https://github.com/wicaksana94/kodeva`
-- **Studio CMS (marketing):** `https://kodeva-ten.vercel.app/studio`
+- **Studio CMS (marketing):** `https://kodeva-dev.vercel.app/studio`
 - **AI log:** lihat [`AI_LOG.md`](./AI_LOG.md)
 - **Laporan Lighthouse:** lihat [`docs/lighthouse/`](./docs/lighthouse) (JSON + HTML + screenshot)
 - **Waktu pengerjaan:** ±1,5 jam, satu sesi pada 17 Oktober 2026 (implementasi 09:45–10:20 WIB
@@ -55,7 +55,7 @@ _Technical Skill Test Fullstack Developer DSG_.
 - [x] Git repo dengan riwayat commit granular (bukan satu commit besar)
 - [x] README.md (dokumen ini)
 - [x] AI_LOG.md
-- [x] Link deploy — `https://kodeva-ten.vercel.app`
+- [x] Link deploy — `https://kodeva-dev.vercel.app`
 
 ---
 
